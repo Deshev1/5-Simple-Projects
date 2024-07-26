@@ -1,0 +1,28 @@
+.budget-input {
+  width: 10rem;
+}
+
+.budget-number {
+  font-size: 4rem;
+}
+
+.expense-submit {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.table {
+  width: 100%;
+  background-color: #e8e8e8d6;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.e-remove {
+  text-align: center;
+}

@@ -1,0 +1,111 @@
+/* ///////////////////////// */
+/* CONTAINERS */
+/* ///////////////////////// */
+
+/* ///////////////////////// */
+/* SUBMIT SECTION */
+/* ///////////////////////// */
+
+.submit-form-container {
+  width: 100%;
+}
+.todo-form {
+  gap: 1rem;
+}
+
+.char-count {
+  margin-left: auto;
+  color: rgba(0, 0, 0, 0.399);
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+
+/* ///////////////////////// */
+/* PENDING SECTION */
+/* ///////////////////////// */
+
+.task-btns {
+  display: flex;
+  width: 9rem;
+  height: 3rem;
+  justify-content: space-between;
+}
+.task-title {
+  width: 23rem;
+  overflow-wrap: break-word;
+}
+
+.task-content {
+  width: 65rem;
+  height: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+
+  background-color: white;
+}
+
+.title-input {
+  height: 5rem;
+  margin-bottom: 2rem;
+}
+
+.content-input {
+  min-height: 10rem;
+}
+
+.hidden-btns {
+  position: absolute;
+  width: 10rem;
+  opacity: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  transition: opacity 0.2s linear;
+}
+
+.task-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+
+  width: 100%;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background-color: #e8e8e8d6;
+}
+
+.buttons-container.fill {
+  width: 100%;
+  height: 100%;
+  background-color: #9eb557f5;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.task-container:hover > .hidden-btns,
+.hidden-btns:hover {
+  opacity: 1;
+}
+
+.remove-task-btn,
+.cancel-task-btn {
+  color: rgb(188, 29, 29);
+}
+
+.complete-task-btn {
+  color: rgb(31, 155, 31);
+}
+
+/* ///////////////////////// */
+/* CANCELED SECTION */
+/* ///////////////////////// */
+
+/* ///////////////////////// */
+/* COMPLETED SECTION */
+/* ///////////////////////// */

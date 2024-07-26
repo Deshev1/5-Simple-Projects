@@ -1,0 +1,175 @@
+/* ///////////////////////// */
+/* GLOBAL RESET */
+/* ///////////////////////// */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+html {
+  font-size: 62.5%;
+  height: 100%;
+  background-image: url(/img/dan-cristian-padure-SMSLyc9FHl0-unsplash.webp);
+}
+
+body {
+  font-size: 1.6rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Inter", sans-serif;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+h1 {
+  font-size: 6rem;
+  margin: 6rem 0 6rem 0;
+  text-align: center;
+  color: white;
+}
+
+h2 {
+  font-size: 4rem;
+}
+
+h3 {
+  font-size: 3rem;
+  padding-bottom: 3rem;
+}
+
+h4 {
+  font-size: 2rem;
+}
+
+label {
+  margin-right: auto;
+}
+
+/* ///////////////////////// */
+/* GENERAL STYLES */
+/* ///////////////////////// */
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.section {
+  width: 120rem;
+  margin: 0 auto 10rem auto;
+  padding: 6rem 3rem 6rem 3rem;
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.423);
+
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+}
+
+.card {
+  gap: 3rem;
+  padding: 3rem;
+  border: 1px solid black;
+  border-radius: 2rem;
+  backdrop-filter: blur(0.5rem);
+}
+
+.btn {
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+}
+
+.textarea {
+  width: 100%;
+  border: 0;
+  padding: 1rem;
+  border-radius: 1rem;
+  resize: none;
+  height: 4rem;
+  overflow: hidden;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 3rem;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 1rem;
+}
+
+.grid-2-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+}
+
+.grid-3-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6rem;
+}
+
+.grid-full-width {
+  grid-column: 1/ -1;
+}
+
+.buttons-container {
+  display: flex;
+  width: 10rem;
+  justify-content: space-between;
+}
+
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  opacity: 0;
+  transition: opacity 0.5s linear;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  position: absolute;
+  margin: auto auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  white-space: pre-wrap;
+  border-radius: 1rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -1,3 +1,5 @@
+document.querySelector(".expense-date").valueAsDate = new Date();
+
 let currentBudget;
 
 let budgetCard = document.querySelector(".set-budget-card");
@@ -22,6 +24,7 @@ let emptyLabel = document.querySelector(".empty-label");
 /* ///////////////////////// */
 let resetField = function (...fields) {
   fields.forEach((f) => (f.value = ""));
+  document.querySelector(".expense-date").valueAsDate = new Date();
 };
 
 let addTransaction = function (type, date, nameT, number) {
@@ -30,11 +33,11 @@ let addTransaction = function (type, date, nameT, number) {
   table.insertAdjacentHTML(
     "beforeend",
     `<tr class="${type}">
-             <td class="e-date">${type}</td>
-        <td class="e-date">${date}</td>
-        <td class="e-name">${nameT}</td>
-        <td class="e-date">${number}lv.</td>
-        <td class='e-remove'>
+        <td class="t-type">${type}</td>
+        <td class="t-date">${date}</td>
+        <td class="t-name">${nameT}</td>
+        <td class="t-number" lenumber="${number}">${number}lv.</td>
+        <td class='t-remove'>
             <ion-icon
                 class="btn remove-transaction"
                 name="close-circle-outline"
@@ -79,7 +82,7 @@ transactionSubmit.addEventListener("click", function () {
       alert("Insufficient funds!");
     } else {
       currentBudget = currentBudget - number;
-      addTransaction(type, date, nameT, number);
+      addTransaction(type, date, nameT, -number);
     }
   } else {
     console.log(currentBudget);
@@ -94,12 +97,18 @@ transactionSubmit.addEventListener("click", function () {
 table.addEventListener("click", function (e) {
   if (e.target.classList.contains("remove-transaction")) {
     let transaction = e.target.parentElement.parentElement;
-    console.log(transaction.closest());
-    if (transaction.closestChild.classList.contains("expense")) {
-      console.log("expense");
-    } else {
-      console.log("fund");
-    }
+    let transactionNumber = Number(
+      transaction.querySelector(".t-number").getAttribute("lenumber")
+    );
+    console.log(transactionNumber);
+    console.log(typeof transactionNumber);
+
+    console.log(currentBudget);
+    currentBudget = currentBudget - transactionNumber;
+    budgetNumber.innerHTML = `${currentBudget}lv.`;
+
+    console.log(currentBudget);
+
     transaction.remove();
   }
 });

@@ -23,8 +23,13 @@ td {
   border-collapse: collapse;
 }
 
-.e-remove {
+td {
+  padding-left: 0.5rem;
+}
+
+.t-remove {
   text-align: center;
+  padding: 0;
 }
 
 .budget-display-card {

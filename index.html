@@ -62,8 +62,9 @@
         <div class="flex-column card set-budget-card">
           <h3 class="budget-title">Set your budget:</h3>
 
-          <input type="number" class="textarea budget-input"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+          <input type="number" class="textarea budget-input" min="1"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57" oninput="validity.valid|| 
+    (value='')">
           <ion-icon type="button" class="btn budget-btn" name="add-circle-outline"></ion-icon>
         </div>
 
@@ -80,7 +81,7 @@
           <div>
             <label>Type:</label>
             <select class="textarea transaction-type">
-              <option value="" disabled selected>Select your option</option>
+              <option value="" disabled selected>Select transaction type</option>
               <option value="expense">Expense</option>
               <option value="income">Income</option>
             </select>
@@ -114,16 +115,7 @@
             <th>Amount</th>
           </tr>
           <tr class="empty-label">
-          <tr class="${type}">
-            <td class="e-date">${type}</td>
-            <td class="e-date">${date}</td>
-            <td class="e-name">${nameT}</td>
-            <td class="e-date">${number}lv.</td>
-            <td class='e-remove'>
-              <ion-icon class="btn remove-transaction" name="close-circle-outline">
-              </ion-icon>
-            </td>
-          </tr>
+            <td colspan="4">No transactions available.</td>
           </tr>
         </table>
       </div>

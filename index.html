@@ -1,174 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <meta
-      http-equiv="X-UA-Compatible"
-      content="ie=edge"
-    />
-    <title>Deshev's To-Do List</title>
-    <link
-      rel="stylesheet"
-      href="/css/todo.css"
-    />
-    <link
-      rel="stylesheet"
-      href="/css/general.css"
-    />
-    <link
-      rel="stylesheet"
-      href="/css/expense.css"
-    />
-  </head>
-  <body>
-    <main>
-      <h1>5 simple projects</h1>
 
-      <div class="section">
-        <h2>To-Do List</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Deshev's To-Do List</title>
+  <link rel="stylesheet" href="/css/todo.css" />
+  <link rel="stylesheet" href="/css/general.css" />
+  <link rel="stylesheet" href="/css/expense.css" />
+</head>
 
-        <div class="grid-3-cols">
-          <div class="flex-column card">
-            <h3>Canceled</h3>
-            <ol class="flex-column canceled-list"></ol>
+<body>
+  <main>
+    <h1>5 simple projects</h1>
+
+    <div class="section">
+      <h2>To-Do List</h2>
+
+      <div class="grid-3-cols">
+        <div class="flex-column card">
+          <h3>Canceled</h3>
+          <ol class="flex-column canceled-list"></ol>
+        </div>
+
+        <div class="flex-column card">
+          <h3>Submit</h3>
+          <div class="submit-form-container">
+            <form class="flex-column todo-form">
+              <label for="title-input">Enter your title:</label>
+              <textarea type="text" id="title-input" class="title-input textarea" maxlength="35"></textarea>
+
+              <label for="content-input">Enter your content:</label>
+              <textarea type="text" id="content-input" class="content-input textarea" maxlength="200"></textarea>
+              <p class="char-count">a</p>
+
+              <div class="buttons-container">
+                <ion-icon class="btn clear-btn" name="close-circle-outline">
+                </ion-icon>
+                <ion-icon type="button" class="btn submit-btn" name="add-circle-outline"></ion-icon>
+              </div>
+            </form>
           </div>
+        </div>
 
-          <div class="flex-column card">
-            <h3>Submit</h3>
-            <div class="submit-form-container">
-              <form class="flex-column todo-form">
-                <label for="title-input">Enter your title:</label>
-                <textarea
-                  type="text"
-                  id="title-input"
-                  class="title-input textarea"
-                  maxlength="35"
-                ></textarea>
+        <div class="flex-column card">
+          <h3>Completed</h3>
+          <ol class="flex-column completed-list"></ol>
+        </div>
 
-                <label for="content-input">Enter your content:</label>
-                <textarea
-                  type="text"
-                  id="content-input"
-                  class="content-input textarea"
-                  maxlength="200"
-                ></textarea>
-                <p class="char-count">a</p>
+        <div class="flex-column grid-full-width card">
+          <h3>Pending tasks:</h3>
+          <ol class="flex-column pending-list"></ol>
+        </div>
+      </div>
+    </div>
 
-                <div class="buttons-container">
-                  <ion-icon
-                    class="btn clear-btn"
-                    name="close-circle-outline"
-                  >
-                  </ion-icon>
-                  <ion-icon
-                    type="button"
-                    class="btn submit-btn"
-                    name="add-circle-outline"
+    <div class="section">
+      <h2 class="section-heading">Expense tracker</h2>
+      <div>
+        <div class="flex-column card set-budget-card">
+          <h3 class="budget-title">Set your budget:</h3>
 
-                    
-                  ></ion-icon>
-                </div>
-              </form>
-            </div>
-          </div>
+          <input type="number" class="textarea budget-input"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+          <ion-icon type="button" class="btn budget-btn" name="add-circle-outline"></ion-icon>
+        </div>
 
-          <div class="flex-column card">
-            <h3>Completed</h3>
-            <ol class="flex-column completed-list"></ol>
-          </div>
-
-          <div class="flex-column grid-full-width card">
-            <h3>Pending tasks:</h3>
-            <ol class="flex-column pending-list"></ol>
-          </div>
+        <div class="flex-column card budget-display-card">
+          <h3 class="current-budget-title">Current budget:</h3>
+          <p class="budget-number">0lv.</p>
         </div>
       </div>
 
-      <div class="section">
-        <h2 class="section-heading">Expense tracker</h2>
-        <div class="grid-2-cols">
-          <div class="flex-column card">
-            <h3 class="budget-title">Set your budget:</h3>
+      <div class="card">
+        <h3>Add a new transaction:</h3>
+        <div class="grid-2-cols transaction-details">
 
-            <input
-            type="number"
-              class="textarea budget-input"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            ></input>
-            <ion-icon
-              type="button"
-              class="btn budget-btn"
-              name="add-circle-outline"
-            ></ion-icon>
+          <div>
+            <label>Type:</label>
+            <select class="textarea transaction-type">
+              <option value="" disabled selected>Select your option</option>
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
           </div>
 
-          <div class="flex-column card">
-            <h3 class="current-budget-title">Current budget:</h3>
-            <p class="budget-number">0lv.</p>
+          <div>
+            <label>Name:</label>
+            <textarea class="textarea expense-name" maxlength="50"></textarea>
           </div>
-        </div>
 
-        <div class="card">
-          <h3>Add a new transaction:</h3>
-          <div class="grid-2-cols transaction-details">
-
-            <div>
-              <label>Type:</label>
-              <select
-                class="textarea expense-type"
-                maxlength="50"
-              ></select>
-            </div>
-            <div>
-              <label>Name:</label>
-              <textarea
-                class="textarea expense-name"
-                maxlength="50"
-              ></textarea>
-            </div>
-            <div>
-              <label>Date:</label>
-              <input class="textarea expense-date" type="date"></input>
-            </div>
-            <div>
-              <label>Amount:</label>
-              <input class="textarea expense-number" type="number"></input>
-            </div>
-             <ion-icon
-              type="button"
-              class="btn expense-submit grid-full-width"
-              name="add-circle-outline"
-            ></ion-icon>
+          <div>
+            <label>Date:</label>
+            <input class="textarea expense-date" type="date"></input>
           </div>
-        </div>
 
-        <div class="card">
-          <table class="table">
-            <tr class="table-headings">
-              <th>Date</th>
-              <th>Name</th>
-              <th>Amount</th>
-            </tr>
-            <tr class="empty-label">
-              <td colspan="4">No transactions available.</td>
-            </tr>
-          </table>
+          <div>
+            <label>Amount:</label>
+            <input class="textarea expense-number" type="number"></input>
+          </div>
+
+          <ion-icon type="button" class="btn expense-submit grid-full-width" name="add-circle-outline"></ion-icon>
         </div>
       </div>
-    </main>
-    <script src="/js/todo.js"></script>
-    <script src="/js/expense.js"></script>
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
-    ></script>
-  </body>
+
+      <div class="card">
+        <table class="table">
+          <tr class="table-headings">
+            <th>Type</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Amount</th>
+          </tr>
+          <tr class="empty-label">
+          <tr class="${type}">
+            <td class="e-date">${type}</td>
+            <td class="e-date">${date}</td>
+            <td class="e-name">${nameT}</td>
+            <td class="e-date">${number}lv.</td>
+            <td class='e-remove'>
+              <ion-icon class="btn remove-transaction" name="close-circle-outline">
+              </ion-icon>
+            </td>
+          </tr>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </main>
+  <script src="/js/todo.js"></script>
+  <script src="/js/expense.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
 </html>

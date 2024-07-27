@@ -26,3 +26,7 @@ td {
 .e-remove {
   text-align: center;
 }
+
+.budget-display-card {
+  display: none;
+}

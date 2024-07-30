@@ -11,7 +11,7 @@
   margin-right: auto;
 }
 
-.table {
+.transaction-table {
   width: 100%;
   background-color: #e8e8e8d6;
 }
@@ -34,4 +34,12 @@ td {
 
 .budget-display-card {
   display: none;
+}
+
+.expense-row {
+  background-color: rgba(255, 0, 0, 0.15);
+}
+
+.income-row {
+  background-color: rgba(0, 128, 0, 0.15);
 }

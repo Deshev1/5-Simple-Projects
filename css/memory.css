@@ -1,0 +1,24 @@
+.memory-card {
+  padding: 0;
+  height: 30rem;
+  width: 30rem;
+}
+
+.back {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2rem;
+  background-image: url(/img/butterfly.jpg) cover;
+}
+
+.front {
+  width: 100%;
+  height: 100%;
+  border-radius: 2rem;
+  background-color: red;
+  background-image: url(/img/lion.jpg);
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+}

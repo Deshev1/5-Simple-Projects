@@ -71,16 +71,7 @@ label {
   margin-right: auto;
 }
 
-/* ///////////////////////// */
-/* GENERAL STYLES */
-/* ///////////////////////// */
-
-.hidden {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.section {
+section {
   width: 120rem;
   margin: 0 auto 10rem auto;
   padding: 6rem 3rem 6rem 3rem;
@@ -92,12 +83,22 @@ label {
   gap: 6rem;
 }
 
+/* ///////////////////////// */
+/* GENERAL STYLES */
+/* ///////////////////////// */
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
 .card {
   gap: 3rem;
   padding: 3rem;
   border: 1px solid black;
   border-radius: 2rem;
   backdrop-filter: blur(0.5rem);
+  overflow: hidden;
 }
 
 .btn {

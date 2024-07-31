@@ -3,9 +3,11 @@ const budgetInputCard = document.querySelector(".set-budget-card");
 const budgetInput = document.querySelector(".budget-input");
 const budgetSubmit = document.querySelector(".budget-btn");
 
-//Budget display selectors
-const budgetDisplayCard = document.querySelector(".budget-display-card");
-const budgetDisplayLabel = document.querySelector(".budget-number");
+//Budget/Expense/Income display selectors
+const movementCards = document.querySelectorAll(".movement-card");
+const budgetDisplayLabel = document.querySelector(".budget-amount");
+const expensesDisplayLabel = document.querySelector(".expense-amount");
+const incomesDisplayLabel = document.querySelector(".income-amount");
 
 //Transaction input selectors
 const transactionType = document.querySelector(".transaction-type");
@@ -16,45 +18,46 @@ const transactionSubmit = document.querySelector(".expense-submit");
 
 //Transaction table selectors
 const transactionTable = document.querySelector(".transaction-table");
+const tableTransactions = document.querySelector(".table-transactions");
 const tableEmptyLabel = document.querySelector(".empty-label");
 
 //Set default date to today
 transactionDate.valueAsDate = new Date();
+transactionDate.max = new Date().toISOString().split("T")[0];
 
 //Dynamic variables
-let currentBudget;
+let currentBudget = 0;
 let transactions = [];
+let totalTransactions = transactions.length;
 
 /* ///////////////////////// */
 /* FUNCTIONS */
 /* ///////////////////////// */
 
 //Budget input function
-let setBudget = function () {
-  //Take budget from input and convert it to a number
-  let budgetInputVal = Number(budgetInput.value);
+const setBudget = function (amount) {
   //Alert the user if budget input is empty
-  if (!budgetInputVal) {
+  if (!amount) {
     alert("Please enter your budget!");
   } else {
-    //Set current budget to input value
-    currentBudget = budgetInputVal;
-    //Set budget display label
-    budgetDisplayLabel.innerHTML = `${currentBudget}lv.`;
+    console.log(typeof amount);
+    budgetDisplayLabel.innerHTML = `${amount}lv.`;
+    incomesDisplayLabel.innerHTML = `${amount}lv.`;
+
     //Remove budget input card
     budgetInputCard.remove();
     //Show budget amount card
-    budgetDisplayCard.style.display = "flex";
+    movementCards.forEach((c) => (c.style.display = "flex"));
   }
 };
 
 //Input field reset
-let resetField = function (...fields) {
+const resetField = function (...fields) {
   fields.forEach((f) => (f.value = ""));
 };
 
 //Validate transaction inputs
-let validate = function (t, d, n, a) {
+const validate = function (t, d, n, a) {
   //checks if all entries are entered
   if (!t || !d || !n || !a) {
     alert("Please fill in all expense details!");
@@ -71,17 +74,13 @@ let validate = function (t, d, n, a) {
     return;
   }
   //processes transaction
-  else {
-    return 1;
-  }
+  else return 1;
 };
 
 //Process transaction inputs (after validation)
-let processTransactionInputs = function (t, d, n, a) {
+const processTransactionInputs = function (t, d, n, a) {
   //Change to negative amount if type = expense
-  if (t === "expense") {
-    a = -a;
-  }
+  if (t === "expense") a = -a;
 
   //Store transaction details in transactions list
   transactions.push({
@@ -99,22 +98,18 @@ let processTransactionInputs = function (t, d, n, a) {
   resetField(transactionType, transactionName, transactionAmount);
   //Reset transaction date to today
   transactionDate.valueAsDate = new Date();
+  console.log(transactions);
 };
 
 //Display transactions
-let displayTransactions = function () {
-  //Display table labels
-  transactionTable.innerHTML = `<tr class="transaction-table-headings">
-            <th>Type</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Amount</th>
-          </tr>`;
+const displayTransactions = function () {
+  //Clear table
+  transactionTable.innerHTML = "";
 
   //Display transaction row
   transactions.forEach((t) =>
     transactionTable.insertAdjacentHTML(
-      "beforeend",
+      "afterbegin",
       `<tr class="${t.type}-row">
         <td class="t-type">${t.type}</td>
         <td class="t-date">${t.date}</td>
@@ -123,6 +118,35 @@ let displayTransactions = function () {
       </tr>`
     )
   );
+
+  //Display table labels
+  transactionTable.insertAdjacentHTML(
+    "afterbegin",
+    `<tr class="transaction-table-headings">
+            <th>Type</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Amount</th>
+          </tr>`
+  );
+};
+
+//Calculate transactions amount
+//Calculate expenses
+let expensesAmount = 0;
+let incomesAmount = 0;
+
+const transactionTypeSums = function () {
+  expensesAmount = 0;
+  incomesAmount = 0;
+  transactions.forEach((transaction) =>
+    transaction.type == "expense"
+      ? (expensesAmount += transaction.amount)
+      : (incomesAmount += transaction.amount)
+  );
+
+  expensesDisplayLabel.innerHTML = `${expensesAmount}lv.`;
+  incomesDisplayLabel.innerHTML = `${incomesAmount}lv.`;
 };
 
 /* ///////////////////////// */
@@ -130,7 +154,15 @@ let displayTransactions = function () {
 /* ///////////////////////// */
 
 //Set budget
-budgetSubmit.addEventListener("click", setBudget);
+budgetSubmit.addEventListener("click", function () {
+  let type = "budget";
+  let date = new Date().toISOString().split("T")[0];
+  let name = "initial budget";
+  let amount = Number(budgetInput.value);
+  setBudget(amount);
+  processTransactionInputs(type, date, name, amount);
+  displayTransactions();
+});
 
 //Add expense
 transactionSubmit.addEventListener("click", function () {
@@ -144,6 +176,7 @@ transactionSubmit.addEventListener("click", function () {
   if (validate(type, date, nameT, amount)) {
     processTransactionInputs(type, date, nameT, amount);
     displayTransactions();
+    transactionTypeSums();
   }
 });
 

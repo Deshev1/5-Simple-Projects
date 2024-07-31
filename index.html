@@ -60,7 +60,7 @@
 
     <section>
       <h2 class="section-heading">Expense tracker</h2>
-      <div>
+      <div class="grid-3-cols">
         <div class="flex-column card set-budget-card">
           <h3 class="budget-title">Set your budget:</h3>
 
@@ -70,9 +70,19 @@
           <ion-icon type="button" class="btn budget-btn" name="add-circle-outline"></ion-icon>
         </div>
 
-        <div class="flex-column card budget-display-card">
+        <div class="flex-column card movement-card expense-display-card">
+          <h3 class="current-budget-title">Total expenses:</h3>
+          <p class="current-amount expense-amount">0lv.</p>
+        </div>
+
+        <div class="flex-column card movement-card budget-display-card">
           <h3 class="current-budget-title">Current budget:</h3>
-          <p class="budget-number">0lv.</p>
+          <p class="current-amount budget-amount">0lv.</p>
+        </div>
+
+        <div class="flex-column card movement-card income-display-card">
+          <h3 class="current-budget-title">Total incomes:</h3>
+          <p class="current-amount income-amount">0lv.</p>
         </div>
       </div>
 
@@ -108,7 +118,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card transaction-card">
         <table class="transaction-table">
           <tr class="table-headings">
             <th>Type</th>
@@ -120,6 +130,7 @@
             <td colspan="4">No transactions available.</td>
           </tr>
         </table>
+
       </div>
       </div>
     </section>

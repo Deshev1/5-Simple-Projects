@@ -52,3 +52,16 @@ th {
 .income-row {
   background-color: rgba(0, 128, 0, 0.15);
 }
+
+.sort-btns-container .sort-btn {
+  width: 7rem;
+  height: 3rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0);
+  transition: border 200ms linear;
+}
+
+.sort-btn:hover {
+  cursor: pointer;
+  border: 1px solid black;
+}

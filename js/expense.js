@@ -17,9 +17,18 @@ const transactionAmount = document.querySelector(".expense-number");
 const transactionSubmit = document.querySelector(".expense-submit");
 
 //Transaction table selectors
-const transactionTable = document.querySelector(".transaction-table");
+const transactionTable = document.querySelector(".table-body");
 const tableTransactions = document.querySelector(".table-transactions");
 const tableEmptyLabel = document.querySelector(".empty-label");
+
+//Sort buttons
+const sortBtns = document.querySelectorAll(".sort-btn");
+const sortTypeBtn = document.querySelector(".sort-type");
+const sortDateBtn = document.querySelector(".sort-date");
+const sortNameBtn = document.querySelector(".sort-name");
+const sortAmountBtn = document.querySelector(".sort-amount");
+let sortAscending = false;
+let sortColumn = "";
 
 //Set default date to today
 transactionDate.valueAsDate = new Date();
@@ -27,8 +36,37 @@ transactionDate.max = new Date().toISOString().split("T")[0];
 
 //Dynamic variables
 let currentBudget = 0;
-let transactions = [];
-let totalTransactions = transactions.length;
+let currentExpenses = 0;
+let currentIncomes = 0;
+let currentTransactions = [
+  {
+    type: "budget",
+    date: new Date(2011, 11, 30),
+    name: "Initial budget.",
+    amount: 123,
+  },
+  {
+    type: "expense",
+    date: new Date(2011, 11, 30),
+    name: "23",
+    amount: -23,
+  },
+
+  {
+    type: "income",
+    date: new Date(2011, 11, 30),
+    name: "123",
+    amount: 123,
+  },
+
+  {
+    type: "expense",
+    date: new Date(2011, 11, 30),
+    name: "123",
+    amount: -123,
+  },
+];
+let totalTransactions = currentTransactions.length;
 
 /* ///////////////////////// */
 /* FUNCTIONS */
@@ -39,8 +77,8 @@ const setBudget = function (amount) {
   //Alert the user if budget input is empty
   if (!amount) {
     alert("Please enter your budget!");
+    return false;
   } else {
-    console.log(typeof amount);
     budgetDisplayLabel.innerHTML = `${amount}lv.`;
     incomesDisplayLabel.innerHTML = `${amount}lv.`;
 
@@ -48,6 +86,7 @@ const setBudget = function (amount) {
     budgetInputCard.remove();
     //Show budget amount card
     movementCards.forEach((c) => (c.style.display = "flex"));
+    return true;
   }
 };
 
@@ -57,7 +96,7 @@ const resetField = function (...fields) {
 };
 
 //Validate transaction inputs
-const validate = function (t, d, n, a) {
+const validateTransactionInputs = function (t, d, n, a) {
   //checks if all entries are entered
   if (!t || !d || !n || !a) {
     alert("Please fill in all expense details!");
@@ -78,27 +117,25 @@ const validate = function (t, d, n, a) {
 };
 
 //Process transaction inputs (after validation)
-const processTransactionInputs = function (t, d, n, a) {
+const processTransactionInputs = function (type, dateInput, nameTrn, amount) {
   //Change to negative amount if type = expense
-  if (t === "expense") a = -a;
+  if (type === "expense") amount = -amount;
 
   //Store transaction details in transactions list
-  transactions.push({
-    type: t,
-    date: d,
-    name: n,
-    amount: a,
+  currentTransactions.push({
+    type: type,
+    date: new Date(dateInput),
+    name: nameTrn,
+    amount: amount,
   });
 
   //Update current budget value
-  currentBudget = currentBudget + a;
+  currentBudget = currentBudget + amount;
   //Update current budget label
   budgetDisplayLabel.innerHTML = `${currentBudget}lv.`;
-  //Reset input fields
-  resetField(transactionType, transactionName, transactionAmount);
+
   //Reset transaction date to today
   transactionDate.valueAsDate = new Date();
-  console.log(transactions);
 };
 
 //Display transactions
@@ -107,46 +144,63 @@ const displayTransactions = function () {
   transactionTable.innerHTML = "";
 
   //Display transaction row
-  transactions.forEach((t) =>
-    transactionTable.insertAdjacentHTML(
-      "afterbegin",
-      `<tr class="${t.type}-row">
-        <td class="t-type">${t.type}</td>
-        <td class="t-date">${t.date}</td>
-        <td class="t-name">${t.name}</td>
-        <td class="t-number">${t.amount}lv.</td>
-      </tr>`
-    )
-  );
+  currentTransactions.forEach(function (trn) {
+    let html = `<tr class="${trn.type}-row">
+        <td class="t-type">${trn.type}</td>
+        <td class="t-date">${trn.date.toISOString().split("T")[0]}</td>
+        <td class="t-name">${trn.name}</td>
+        <td class="t-number">${trn.amount}lv.</td>
+      </tr>`;
 
-  //Display table labels
-  transactionTable.insertAdjacentHTML(
-    "afterbegin",
-    `<tr class="transaction-table-headings">
-            <th>Type</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Amount</th>
-          </tr>`
-  );
+    transactionTable.insertAdjacentHTML("afterbegin", html);
+  });
 };
 
-//Calculate transactions amount
-//Calculate expenses
-let expensesAmount = 0;
-let incomesAmount = 0;
-
+//Display incomes and expenses
 const transactionTypeSums = function () {
-  expensesAmount = 0;
-  incomesAmount = 0;
-  transactions.forEach((transaction) =>
-    transaction.type == "expense"
-      ? (expensesAmount += transaction.amount)
-      : (incomesAmount += transaction.amount)
+  currentExpenses = 0;
+  currentIncomes = 0;
+  currentTransactions.forEach((trn) =>
+    trn.type == "expense"
+      ? (currentExpenses += trn.amount)
+      : (currentIncomes += trn.amount)
   );
 
-  expensesDisplayLabel.innerHTML = `${expensesAmount}lv.`;
-  incomesDisplayLabel.innerHTML = `${incomesAmount}lv.`;
+  expensesDisplayLabel.innerHTML = `${currentExpenses}lv.`;
+  incomesDisplayLabel.innerHTML = `${currentIncomes}lv.`;
+};
+
+//Sorts strings A - Z
+const sortNameAlpha = function (col) {
+  currentTransactions.sort((a, b) => {
+    const nameA = a[col].toUpperCase(); // ignore upper and lowercase
+    const nameB = b[col].toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      // A comes before B
+      return -1;
+    }
+    if (nameA > nameB) {
+      //B comes before A
+      return 1;
+    }
+    return 0; // A = B
+  });
+};
+
+//Sorts strings Z - A
+const sortNameRev = function (col) {
+  currentTransactions.sort((a, b) => {
+    const nameA = a[col].toUpperCase(); // ignore upper and lowercase
+    const nameB = b[col].toUpperCase(); // ignore upper and lowercase
+    if (nameA > nameB) {
+      return -1; // B comes before A
+    }
+    if (nameA < nameB) {
+      // A comes before B
+      return 1;
+    }
+    return 0; // A = B
+  });
 };
 
 /* ///////////////////////// */
@@ -156,29 +210,59 @@ const transactionTypeSums = function () {
 //Set budget
 budgetSubmit.addEventListener("click", function () {
   let type = "budget";
-  let date = new Date().toISOString().split("T")[0];
-  let name = "initial budget";
+  let date = new Date();
+  let nameTrn = "Initial budget.";
   let amount = Number(budgetInput.value);
-  setBudget(amount);
-  processTransactionInputs(type, date, name, amount);
-  displayTransactions();
+
+  if (setBudget(amount)) {
+    processTransactionInputs(type, date, nameTrn, amount);
+    displayTransactions();
+  }
 });
 
-//Add expense
+//Add transaction¸
 transactionSubmit.addEventListener("click", function () {
   //Take input values
   let type = transactionType.value;
-  let date = transactionDate.value;
-  let nameT = transactionName.value;
+  let dateInput = transactionDate.value;
+  let nameTrn = transactionName.value;
   let amount = Number(transactionAmount.value);
 
-  //If validation is successful, run process and display transactions
-  if (validate(type, date, nameT, amount)) {
-    processTransactionInputs(type, date, nameT, amount);
-    displayTransactions();
-    transactionTypeSums();
+  //If validation is successful...
+  if (validateTransactionInputs(type, dateInput, nameTrn, amount)) {
+    processTransactionInputs(type, dateInput, nameTrn, amount); // process transaction
+    displayTransactions(); // display transaction
+    transactionTypeSums(); // update incomes and expenses
+    resetField(transactionType, transactionName, transactionAmount); // reset input fields
   }
 });
+
+//Sort buttons
+sortBtns.forEach((btn) =>
+  btn.addEventListener("click", function (e) {
+    sortColumn = e.target.getAttribute("value");
+
+    if (sortColumn == "date") {
+      sortAscending
+        ? currentTransactions.sort(function (a, b) {
+            return new Date(b[sortColumn] - a[sortColumn]);
+          })
+        : currentTransactions.sort(function (a, b) {
+            return new Date(a[sortColumn] - b[sortColumn]);
+          });
+      sortAscending = !sortAscending;
+    } else if (sortColumn == "amount") {
+      sortAscending
+        ? currentTransactions.sort((a, b) => a[sortColumn] - b[sortColumn])
+        : currentTransactions.sort((b, a) => a[sortColumn] - b[sortColumn]);
+      sortAscending = !sortAscending;
+    } else {
+      sortAscending ? sortNameAlpha(sortColumn) : sortNameRev(sortColumn);
+      sortAscending = !sortAscending;
+    }
+    displayTransactions();
+  })
+);
 
 // //Remove expense
 // transactionTable.addEventListener("click", function (e) {

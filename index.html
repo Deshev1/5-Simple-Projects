@@ -65,8 +65,7 @@
           <h3 class="budget-title">Set your budget:</h3>
 
           <input type="number" class="textarea budget-input" min="1"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57" oninput="validity.valid|| 
-    (value='')">
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57" oninput="validity.valid|| (value='')">
           <ion-icon type="button" class="btn budget-btn" name="add-circle-outline"></ion-icon>
         </div>
 
@@ -118,20 +117,33 @@
         </div>
       </div>
 
-      <div class="card transaction-card">
-        <table class="transaction-table">
-          <tr class="table-headings">
-            <th>Type</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Amount</th>
-          </tr>
-          <tr class="empty-label">
-            <td colspan="4">No transactions available.</td>
-          </tr>
-        </table>
+      <div class="card flex-column">
 
-      </div>
+        <!-- <div class="sort-btns-container flex-row">
+          <label>Sort by:</label>
+          <button class="sort-btn sort-type">Type</button>
+          <button class="sort-btn sort-date">Date</button>
+          <button class="sort-btn sort-name">Name</button>
+          <button class="sort-btn sort-amount">Amount</button>
+
+        </div> -->
+
+        <table class="transaction-table">
+          <thead class="table-headings">
+            <tr class="table-headings">
+              <th class="sort-btn" value='type'>Type</th>
+              <th class="sort-btn" value='date'>Date</th>
+              <th class="sort-btn" value='name'>Name</th>
+              <th class="sort-btn" value='amount'>Amount</th>
+            </tr>
+          </thead>
+          <tbody class=table-body>
+            <tr class="empty-label">
+              <td colspan="4">No transactions available.</td>
+            </tr>
+          </tbody>
+
+        </table>
       </div>
     </section>
 

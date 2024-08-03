@@ -1,4 +1,12 @@
-.budget-input {
+:root {
+  --up-arrow-color: #ffffff;
+  --up-arrow-shadow: 0px 0px 10px green;
+
+  --down-arrow-color: #00000049;
+  --down-arrow-shadow: 0px 0px 0px rgba(255, 255, 255, 0);
+}
+
+.budget-i nput {
   width: 10rem;
 }
 
@@ -53,15 +61,81 @@ th {
   background-color: rgba(0, 128, 0, 0.15);
 }
 
-.sort-btns-container .sort-btn {
-  width: 7rem;
-  height: 3rem;
-  border-radius: 1rem;
-  border: 1px solid rgba(0, 0, 0, 0);
-  transition: border 200ms linear;
+.sort-btn {
+  position: relative;
+}
+
+.sort-focus::after {
+  position: absolute;
+  content: "\25b2";
+  font-size: 1rem;
+  color: var(--up-arrow-color);
+  text-shadow: var(--up-arrow-shadow);
+  right: 5rem;
+}
+
+.sort-focus::before {
+  position: absolute;
+  content: "\25bc";
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--down-arrow-color);
+  text-shadow: var(--down-arrow-shadow);
+  right: 5rem;
+  margin-top: 1rem;
 }
 
 .sort-btn:hover {
   cursor: pointer;
   border: 1px solid black;
+}
+
+tbody tr:hover {
+  border: 2px solid black;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+}
+
+.pagination-btns,
+.number-pages-container {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.page-btn {
+  background-color: #e8e8e8d6;
+  border: 1px solid rgba(0, 0, 0, 0.501);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1px;
+}
+
+.page-btn {
+  height: 2.3rem;
+  width: 2.3rem;
+}
+
+.next-page-btn,
+.previous-page-btn {
+  height: 2.3rem;
+  width: 7.3rem;
+}
+
+.page-btn:hover {
+  cursor: pointer;
+  background-color: #ffffffd6;
+  border: 2px solid rgba(0, 0, 0, 0.501);
+}
+
+.active-btn {
+  background-color: #ffffffd6;
+  border: 2px solid rgba(0, 0, 0, 0.501);
 }

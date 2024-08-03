@@ -1,3 +1,6 @@
+//Page styles
+const pageStyles = document.documentElement.style;
+
 //Budget input selectors
 const budgetInputCard = document.querySelector(".set-budget-card");
 const budgetInput = document.querySelector(".budget-input");
@@ -39,32 +42,276 @@ let currentBudget = 0;
 let currentExpenses = 0;
 let currentIncomes = 0;
 let currentTransactions = [
-  {
-    type: "budget",
-    date: new Date(2011, 11, 30),
-    name: "Initial budget.",
-    amount: 123,
-  },
-  {
-    type: "expense",
-    date: new Date(2011, 11, 30),
-    name: "23",
-    amount: -23,
-  },
-
-  {
-    type: "income",
-    date: new Date(2011, 11, 30),
-    name: "123",
-    amount: 123,
-  },
-
-  {
-    type: "expense",
-    date: new Date(2011, 11, 30),
-    name: "123",
-    amount: -123,
-  },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2017, 1, 30),
+  //   name: "Fds",
+  //   amount: -23,
+  // },
+  // {
+  //   type: "income",
+  //   date: new Date(2001, 11, 30),
+  //   name: "Esa",
+  //   amount: 123,
+  // },
+  // {
+  //   type: "expense",
+  //   date: new Date(2019, 11, 12),
+  //   name: "Hdsa",
+  //   amount: -123,
+  // },
+  // {
+  //   type: "budget",
+  //   date: new Date(2011, 11, 30),
+  //   name: "Initial budget.",
+  //   amount: 123,
+  // },
 ];
 let totalTransactions = currentTransactions.length;
 
@@ -99,7 +346,7 @@ const resetField = function (...fields) {
 const validateTransactionInputs = function (t, d, n, a) {
   //checks if all entries are entered
   if (!t || !d || !n || !a) {
-    alert("Please fill in all expense details!");
+    // alert("Please fill in all expense details!");
     return;
   }
   //checks if budget is entered
@@ -158,50 +405,302 @@ const displayTransactions = function () {
 
 //Display incomes and expenses
 const transactionTypeSums = function () {
+  // reset expenses and incomes
   currentExpenses = 0;
   currentIncomes = 0;
+
+  // go through each transaction and tally up the expenses and incomes
   currentTransactions.forEach((trn) =>
     trn.type == "expense"
       ? (currentExpenses += trn.amount)
       : (currentIncomes += trn.amount)
   );
 
+  // display expenses and incomes
   expensesDisplayLabel.innerHTML = `${currentExpenses}lv.`;
   incomesDisplayLabel.innerHTML = `${currentIncomes}lv.`;
 };
 
-//Sorts strings A - Z
-const sortNameAlpha = function (col) {
-  currentTransactions.sort((a, b) => {
-    const nameA = a[col].toUpperCase(); // ignore upper and lowercase
-    const nameB = b[col].toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      // A comes before B
-      return -1;
-    }
-    if (nameA > nameB) {
-      //B comes before A
-      return 1;
-    }
-    return 0; // A = B
-  });
+//Change sort button style
+const styleSortBtn = function (ascending) {
+  if (ascending) {
+    pageStyles.setProperty("--up-arrow-color", "#00000049");
+    pageStyles.setProperty(
+      "--up-arrow-shadow",
+      "0px 0px 0px rgba(255, 255, 255, 0"
+    );
+    pageStyles.setProperty("--down-arrow-color", "#ffffff");
+    pageStyles.setProperty("--down-arrow-shadow", "0px 0px 10px red");
+  } else {
+    pageStyles.setProperty("--up-arrow-color", "#ffffff");
+    pageStyles.setProperty("--up-arrow-shadow", "0px 0px 10px green");
+    pageStyles.setProperty("--down-arrow-color", "#00000049");
+    pageStyles.setProperty(
+      "--down-arrow-shadow",
+      "0px 0px 0px rgba(255, 255, 255, 0)"
+    );
+  }
 };
 
-//Sorts strings Z - A
-const sortNameRev = function (col) {
-  currentTransactions.sort((a, b) => {
-    const nameA = a[col].toUpperCase(); // ignore upper and lowercase
-    const nameB = b[col].toUpperCase(); // ignore upper and lowercase
-    if (nameA > nameB) {
-      return -1; // B comes before A
+/* ///////////////////////// */
+/* Current task - pagination СТАРТ*/
+/* ///////////////////////// */
+
+// const tableLength = 5;
+// const startIndex = 1;
+// const endIndex = 5;
+
+// let resetBtns = function () {
+//   pageBtnsContainer.innerHTML = `
+//     <button class="page-btn previous-page-btn">Previous</button>`; //reset buttons (have only first button)
+// };
+
+// let addLastBtn = function () {
+//   pageBtnsContainer.insertAdjacentHTML(
+//     "beforeend",
+//     `<button class="page-btn next-page-btn">Next</button>`
+//   ); // add last button (next page)
+// };
+
+// let above8 = function () {
+//   addNumBtn(1); //add first page
+
+//   //if first 4 pages selected
+//   if (Number(activeBtnValue) < 5) {
+//     console.log("more than 8, first 4");
+//     for (let i = 2; i < 6; i++) {
+//       addNumBtn(i);
+//     }
+//     addNumBtn("...");
+//   }
+//   //if last 4 pages selected
+//   else if (Number(activeBtnValue) > numberOfPages - 5) {
+//     console.log("more than 8, last 4");
+//     addNumBtn("...");
+//     for (let i = numberOfPages - 5; i < numberOfPages; i++) {
+//       addNumBtn(i);
+//     }
+//   }
+//   addNumBtn(numberOfPages); // add last page
+// };
+
+// document.querySelectorAll(".page-number-btn").forEach((btn) => {
+//   btn.addEventListener("click", function () {
+//     if (activeBtnValue != btn.value) {
+//       btn.classList.add("active-btn");
+//       activeBtn.classList.remove("active-btn");
+//       activeBtnValue = btn.value;
+//       console.log(btn);
+//       console.log(activeBtn);
+//     }
+//   });
+// });
+
+// const displayBtns = function () {
+//   numberOfTransactions = currentTransactions.length;
+//   numberOfPages = Math.ceil(numberOfTransactions / 5);
+
+//   resetBtns();
+//   if (numberOfPages == 1) {
+//     addNumBtn(1);
+//   } else if (numberOfPages > 1 && numberOfPages < 8) {
+//     //
+//     for (let i = 0; i < numberOfPages; i++) {
+//       addNumBtn(i + 1);
+//     }
+//   } else {
+//     above8();
+//   }
+//   addLastBtn();
+
+//   pageNumBtns = document.querySelectorAll(".page-number-btn");
+
+//   pageNumBtns.forEach((btn) => {
+//     if (btn.value == activeBtnValue) {
+//       btn.classList.add("active-btn");
+//     }
+//   });
+
+//   pageNumBtns.forEach((btn) => {
+//     addEventListener("click", function () {
+//       if (btn.value != activeBtnValue) {
+//         document
+//           .querySelectorAll(".page-number-btn")
+//           .forEach((btn) => btn.classList.remove("active-btn"));
+//         btn.classList.add("active-btn");
+
+//         activeBtnValue = btn.value;
+//         displayBtns();
+//       }
+//     });
+//   });
+// };
+
+// let updateListener = function () {
+//   document.querySelectorAll(".page-number-btn").forEach((btn) => {
+//     btn.addEventListener("click", function () {
+//       if (btn.value != activeBtnValue) {
+//         document
+//           .querySelectorAll(".page-number-btn")
+//           .forEach((btn) => btn.classList.remove("active-btn"));
+//         btn.classList.add("active-btn");
+
+//         activeBtnValue = btn.value;
+//       }
+//     });
+//   });
+// };
+
+const pageBtnsContainer = document.querySelector(".number-pages-container");
+let pageNumBtns = document.querySelectorAll(".page-btn");
+let activeBtnValue = "1";
+
+let pageBtn1;
+let pageBtn2;
+let pageBtn3;
+let pageBtn4;
+let pageBtn5;
+let pageBtn6;
+let pageBtn7;
+
+let numberOfTransactions = 0;
+let numberOfPages = 1;
+let state = "start";
+
+function changeValue(el, val) {
+  el.value = val;
+  el.textContent = val;
+}
+
+function eventL(page) {
+  page.addEventListener("click", function () {
+    let pageIndex = page.getAttribute("index"); // current button index
+    let pageValue = Number(page.value); // current button value
+
+    if (!page.classList.contains("active-btn")) {
+      document.querySelector(".active-btn").classList.remove("active-btn"); // remove active-btn class from previous button
+      page.classList.add("active-btn"); // add active-btn class to current btn
     }
-    if (nameA < nameB) {
-      // A comes before B
-      return 1;
+
+    function seeStart() {
+      console.log("start");
+      changeValue(pageBtn2, 2);
+      changeValue(pageBtn3, 3);
+      changeValue(pageBtn4, 4);
+      changeValue(pageBtn5, 5);
+      changeValue(pageBtn6, "...");
+      state = "start";
     }
-    return 0; // A = B
+
+    function seeEnd() {
+      changeValue(pageBtn2, "...");
+      changeValue(pageBtn3, numberOfPages - 4);
+      changeValue(pageBtn4, numberOfPages - 3);
+      changeValue(pageBtn5, numberOfPages - 2);
+      changeValue(pageBtn6, numberOfPages - 1);
+      state = "end";
+    }
+
+    function seeThree(num1, num2, num3) {
+      changeValue(pageBtn2, "...");
+      changeValue(pageBtn3, num1);
+      changeValue(pageBtn4, num2);
+      changeValue(pageBtn5, num3);
+      changeValue(pageBtn6, "...");
+      document.querySelector(".active-btn").classList.remove("active-btn");
+      pageBtn4.classList.add("active-btn");
+      state = "three";
+    }
+
+    if (pageIndex === "1") {
+      seeStart();
+    } else if (pageIndex === "7") {
+      seeEnd();
+    }
+
+    if (state == "start") {
+      if (pageIndex == "5") {
+        seeThree(pageValue - 1, pageValue, pageValue + 1);
+      }
+    } else if (state == "end") {
+      if (pageIndex == "3") {
+        seeThree(pageValue - 1, pageValue, pageValue + 1);
+      }
+    } else {
+      if (pageIndex == "3") {
+        if (pageValue < 5) {
+          document.querySelector(".active-btn").classList.remove("active-btn");
+
+          seeStart();
+          document.querySelector(".page-btn4").classList.add("active-btn");
+        } else {
+          console.log("aaa");
+
+          seeThree(pageValue - 1, pageValue, pageValue + 1);
+        }
+      } else if (pageIndex == "5") {
+        if (pageValue > numberOfPages - 4) {
+          document.querySelector(".active-btn").classList.remove("active-btn");
+
+          seeEnd();
+          document.querySelector(".page-btn4").classList.add("active-btn");
+        } else {
+          console.log("a");
+          seeThree(pageValue - 1, pageValue, pageValue + 1);
+        }
+      }
+    }
   });
+}
+
+//add listener to first page
+eventL(document.querySelector(".page-btn"));
+
+let addNumBtn = function (index) {
+  pageBtnsContainer.insertAdjacentHTML(
+    //have first page visible
+    "beforeend",
+    ` <button class="page-btn page-btn${index}" index="${index}" value="${index}">${index}</button>`
+  );
 };
+
+function addPage() {
+  numberOfTransactions = currentTransactions.length;
+
+  if (numberOfPages < Math.ceil(numberOfTransactions / 5)) {
+    numberOfPages += 1;
+    if (numberOfPages < 8) {
+      addNumBtn(numberOfPages);
+      eventL(pageBtnsContainer.lastChild);
+    } else {
+      pageBtn2 = document.querySelector(".page-btn2");
+      pageBtn3 = document.querySelector(".page-btn3");
+      pageBtn4 = document.querySelector(".page-btn4");
+      pageBtn5 = document.querySelector(".page-btn5");
+      pageBtn6 = document.querySelector(".page-btn6");
+      pageBtn7 = document.querySelector(".page-btn7");
+
+      pageBtn7.value = numberOfPages;
+      pageBtn7.textContent = numberOfPages;
+      if (document.querySelector(".active-btn").value < 5) {
+        console.log("active < 5");
+        pageBtn6.value = "...";
+        pageBtn6.textContent = "...";
+      } else if (
+        document.querySelector(".active-btn").value >
+        numberOfPages - 5
+      ) {
+        console.log("active > 4");
+        pageBtn2.value = "...";
+        pageBtn2.textContent = "...";
+      }
+    }
+  }
+}
+
+/* ///////////////////////// */
+/* Current task - pagination ЕНД*/
+/* ///////////////////////// */
 
 /* ///////////////////////// */
 /* HANDLERS */
@@ -217,15 +716,31 @@ budgetSubmit.addEventListener("click", function () {
   if (setBudget(amount)) {
     processTransactionInputs(type, date, nameTrn, amount);
     displayTransactions();
+    displayBtns();
   }
 });
 
 //Add transaction¸
 transactionSubmit.addEventListener("click", function () {
   //Take input values
+
+  //TEST START
+  for (let i = 0; i < 5; i++) {
+    currentTransactions.push({
+      type: "budget",
+      date: new Date(2011, 11, 30),
+      name: "Initial budget.",
+      amount: 123,
+    });
+  }
+
+  addPage();
+  //TEST END
+
   let type = transactionType.value;
   let dateInput = transactionDate.value;
   let nameTrn = transactionName.value;
+  nameTrn = nameTrn.charAt(0).toUpperCase() + nameTrn.slice(1);
   let amount = Number(transactionAmount.value);
 
   //If validation is successful...
@@ -238,48 +753,35 @@ transactionSubmit.addEventListener("click", function () {
 });
 
 //Sort buttons
-sortBtns.forEach((btn) =>
+sortBtns.forEach((btn) => {
   btn.addEventListener("click", function (e) {
-    sortColumn = e.target.getAttribute("value");
+    styleSortBtn(sortAscending); // styles the sort button
+    sortBtns.forEach((btn) => btn.classList.remove("sort-focus")); // removes focus from all buttons
+    sortColumn = e.target.getAttribute("value"); //gets the name of the column
+    e.target.classList.add("sort-focus"); //sets focus on the clicked button
 
     if (sortColumn == "date") {
+      // sort logic if sorting the dates
       sortAscending
-        ? currentTransactions.sort(function (a, b) {
-            return new Date(b[sortColumn] - a[sortColumn]);
-          })
-        : currentTransactions.sort(function (a, b) {
-            return new Date(a[sortColumn] - b[sortColumn]);
-          });
-      sortAscending = !sortAscending;
-    } else if (sortColumn == "amount") {
-      sortAscending
-        ? currentTransactions.sort((a, b) => a[sortColumn] - b[sortColumn])
-        : currentTransactions.sort((b, a) => a[sortColumn] - b[sortColumn]);
-      sortAscending = !sortAscending;
+        ? currentTransactions.sort(
+            (a, b) => new Date(a[sortColumn] - b[sortColumn])
+          )
+        : currentTransactions.sort(
+            (a, b) => new Date(b[sortColumn] - a[sortColumn])
+          );
     } else {
-      sortAscending ? sortNameAlpha(sortColumn) : sortNameRev(sortColumn);
-      sortAscending = !sortAscending;
+      // sort logic if sorting everything else
+      sortAscending
+        ? currentTransactions.sort((a, b) =>
+            a[sortColumn] < b[sortColumn] ? -1 : 1
+          )
+        : currentTransactions.sort((a, b) =>
+            a[sortColumn] > b[sortColumn] ? -1 : 1
+          );
     }
-    displayTransactions();
-  })
-);
 
-// //Remove expense
-// transactionTable.addEventListener("click", function (e) {
-//   if (e.target.classList.contains("remove-transaction")) {
-//     let transaction = e.target.parentElement.parentElement;
-//     let transactionAmount = Number(
-//       transaction.querySelector(".t-number").getAttribute("lenumber")
-//     );
-//     console.log(transactionAmount);
-//     console.log(typeof transactionAmount);
+    sortAscending = !sortAscending; // change ascending to false
 
-//     console.log(currentBudget);
-//     currentBudget = currentBudget - transactionAmount;
-//     budgetDisplayLabel.innerHTML = `${currentBudget}lv.`;
-
-//     console.log(currentBudget);
-
-//     transaction.remove();
-//   }
-// });
+    displayTransactions(); //update transations
+  });
+});

@@ -17,7 +17,7 @@
   <main>
     <h1>5 simple projects</h1>
 
-    <section>
+    <!-- <section>
       <h2>To-Do List</h2>
 
       <div class="grid-3-cols">
@@ -56,7 +56,7 @@
           <ol class="flex-column pending-list"></ol>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <section>
       <h2 class="section-heading">Expense tracker</h2>
@@ -119,15 +119,6 @@
 
       <div class="card flex-column">
 
-        <!-- <div class="sort-btns-container flex-row">
-          <label>Sort by:</label>
-          <button class="sort-btn sort-type">Type</button>
-          <button class="sort-btn sort-date">Date</button>
-          <button class="sort-btn sort-name">Name</button>
-          <button class="sort-btn sort-amount">Amount</button>
-
-        </div> -->
-
         <table class="transaction-table">
           <thead class="table-headings">
             <tr class="table-headings">
@@ -142,12 +133,25 @@
               <td colspan="4">No transactions available.</td>
             </tr>
           </tbody>
-
         </table>
+
+        <div class="pagination-container">
+          <label class="pagination-lbl">No entries available</label>
+          <div class="pagination-btns">
+            <button class="change-page-btn  previous-page-btn">Previous</button>
+            <div class="number-pages-container">
+              <button class="page-btn page-btn1 active-btn" value="1" index="1">1</button>
+            </div>
+            <button class="change-page-btn next-page-btn">Next</button>
+
+          </div>
+
+        </div>
+
       </div>
     </section>
 
-    <section>
+    <!-- <section>
       <h2 class="section-heading">Memory game</h2>
       <div class="card grid-3-cols">
 
@@ -183,9 +187,9 @@
 
 
       </div>
-    </section>
+    </section> -->
   </main>
-  <script src="/js/todo.js"></script>
+  <!-- <script src="/js/todo.js"></script> -->
   <script src="/js/expense.js"></script>
   <script src="js/memory.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

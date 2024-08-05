@@ -38,7 +38,7 @@ transactionDate.valueAsDate = new Date();
 transactionDate.max = new Date().toISOString().split("T")[0];
 
 //Dynamic variables
-let currentBudget = 0;
+let currentBalance = 0;
 let currentExpenses = 0;
 let currentIncomes = 0;
 let currentTransactions = [];
@@ -79,12 +79,12 @@ const validateTransactionInputs = function (t, d, n, a) {
     return;
   }
   //checks if budget is entered
-  else if (!currentBudget && !currentBudget === 0) {
+  else if (!currentBalance && !currentBalance === 0) {
     alert("Please define your budget!");
     return;
   }
   //checks if expense is bigger than budget
-  else if (t === "expense" && a > currentBudget) {
+  else if (t === "expense" && a > currentBalance) {
     alert("Insufficient funds!");
     return;
   }
@@ -106,30 +106,12 @@ const processTransactionInputs = function (type, dateInput, nameTrn, amount) {
   });
 
   //Update current budget value
-  currentBudget = currentBudget + amount;
+  currentBalance = currentBalance + amount;
   //Update current budget label
-  budgetDisplayLabel.innerHTML = `${currentBudget}lv.`;
+  budgetDisplayLabel.innerHTML = `${currentBalance}lv.`;
 
   //Reset transaction date to today
   transactionDate.valueAsDate = new Date();
-};
-
-//Display transactions
-const displayTransactions = function () {
-  //Clear table
-  transactionTable.innerHTML = "";
-
-  //Display transaction row
-  currentTransactions.forEach(function (trn) {
-    let html = `<tr class="${trn.type}-row">
-        <td class="t-type">${trn.type}</td>
-        <td class="t-date">${trn.date.toISOString().split("T")[0]}</td>
-        <td class="t-name">${trn.name}</td>
-        <td class="t-number">${trn.amount}lv.</td>
-      </tr>`;
-
-    transactionTable.insertAdjacentHTML("afterbegin", html);
-  });
 };
 
 //Display incomes and expenses
@@ -137,6 +119,7 @@ const transactionTypeSums = function () {
   // reset expenses and incomes
   currentExpenses = 0;
   currentIncomes = 0;
+  currentBalance = 0;
 
   // go through each transaction and tally up the expenses and incomes
   currentTransactions.forEach((trn) =>
@@ -145,14 +128,18 @@ const transactionTypeSums = function () {
       : (currentIncomes += trn.amount)
   );
 
+  currentBalance = currentIncomes + currentExpenses;
+
   // display expenses and incomes
   expensesDisplayLabel.innerHTML = `${currentExpenses}lv.`;
   incomesDisplayLabel.innerHTML = `${currentIncomes}lv.`;
+  budgetDisplayLabel.innerHTML = `${currentBalance}`;
+  //ADD CURRENT BUDGET ( INCOMES - EXPENSES)
 };
 
 //Change sort button style
 const styleSortBtn = function (ascending) {
-  if (ascending) {
+  if (!ascending) {
     pageStyles.setProperty("--up-arrow-color", "#00000049");
     pageStyles.setProperty(
       "--up-arrow-shadow",
@@ -172,158 +159,177 @@ const styleSortBtn = function (ascending) {
 };
 
 /* ///////////////////////// */
-/* Current task - pagination СТАРТ*/
+/* PAGINATION START
 /* ///////////////////////// */
 
 const pageBtnsContainer = document.querySelector(".number-pages-container");
-let pageNumBtns = document.querySelectorAll(".page-btn");
-let activeBtnValue = "1";
-
-let pageBtn1;
-let pageBtn2;
-let pageBtn3;
-let pageBtn4;
-let pageBtn5;
-let pageBtn6;
-let pageBtn7;
-
 let numberOfTransactions = 0;
 let numberOfPages = 1;
-let state = "start";
+let startTrn = 1;
+let endTrn = 5;
+let pageIndex = 1; // current button index
+let pageValue = 1;
 
-function changeValue(el, val) {
-  el.value = val;
-  el.textContent = val;
+//Display transactions
+function displayTransactions(pageNumber) {
+  startTrn = (pageNumber - 1) * 5 + 1;
+
+  endTrn = startTrn + 4;
+  if (endTrn > currentTransactions.length) {
+    endTrn = currentTransactions.length;
+  }
+
+  transactionTable.innerHTML = "";
+
+  for (let i = startTrn - 1; i < endTrn; i++) {
+    console.log(`i ${i}`);
+    trn = currentTransactions[i];
+    let html = `<tr class="${trn.type}-row">
+        <td class="t-type">${trn.type}</td>
+        <td class="t-date">${trn.date.toISOString().split("T")[0]}</td>
+        <td class="t-name">${trn.name}</td>
+        <td class="t-number">${trn.amount}lv.</td>
+      </tr>`;
+
+    transactionTable.insertAdjacentHTML("beforeend", html);
+  }
+
+  document.querySelector(
+    ".pagination-lbl"
+  ).textContent = `Currently  ${startTrn} to ${endTrn} of ${currentTransactions.length} `;
 }
 
-function eventL(page) {
-  page.addEventListener("click", function () {
-    let pageIndex = page.getAttribute("index"); // current button index
-    let pageValue = Number(page.value); // current button value
+//Keeps track how the buttons should be displayed
+let pageBtnPosition = "start";
 
+// Array that will store newly created page buttons for easier accessability
+let pageBtns = [];
+
+//Adds the first page and makes it active.
+addPageBtn();
+pageBtns[0].classList.add("active-btn");
+
+// Add page button on page increase till 8 buttons
+function addPageBtn() {
+  //Create page button along with its info, make it visible on the page and store the element in pages array
+  const page = document.createElement("button");
+  page.classList.add("page-btn", `page-btn${numberOfPages}`);
+  page.setAttribute("index", numberOfPages);
+  page.setAttribute("value", numberOfPages);
+  page.textContent = `${numberOfPages}`;
+  pageBtnsContainer.appendChild(page);
+  pageBtns.push(page);
+
+  //Event listener to make the button active on click and remove active label from other button
+  page.addEventListener("click", function () {
     if (!page.classList.contains("active-btn")) {
       document.querySelector(".active-btn").classList.remove("active-btn"); // remove active-btn class from previous button
       page.classList.add("active-btn"); // add active-btn class to current btn
-    }
-
-    function seeStart() {
-      console.log("start");
-      changeValue(pageBtn2, 2);
-      changeValue(pageBtn3, 3);
-      changeValue(pageBtn4, 4);
-      changeValue(pageBtn5, 5);
-      changeValue(pageBtn6, "...");
-      state = "start";
-    }
-
-    function seeEnd() {
-      changeValue(pageBtn2, "...");
-      changeValue(pageBtn3, numberOfPages - 4);
-      changeValue(pageBtn4, numberOfPages - 3);
-      changeValue(pageBtn5, numberOfPages - 2);
-      changeValue(pageBtn6, numberOfPages - 1);
-      state = "end";
-    }
-
-    function seeThree(num1, num2, num3) {
-      changeValue(pageBtn2, "...");
-      changeValue(pageBtn3, num1);
-      changeValue(pageBtn4, num2);
-      changeValue(pageBtn5, num3);
-      changeValue(pageBtn6, "...");
-      document.querySelector(".active-btn").classList.remove("active-btn");
-      pageBtn4.classList.add("active-btn");
-      state = "three";
-    }
-
-    if (pageIndex === "1") {
-      seeStart();
-    } else if (pageIndex === "7") {
-      seeEnd();
-    }
-
-    if (state == "start") {
-      if (pageIndex == "5") {
-        seeThree(pageValue - 1, pageValue, pageValue + 1);
-      }
-    } else if (state == "end") {
-      if (pageIndex == "3") {
-        seeThree(pageValue - 1, pageValue, pageValue + 1);
-      }
-    } else {
-      if (pageIndex == "3") {
-        if (pageValue < 5) {
-          document.querySelector(".active-btn").classList.remove("active-btn");
-
-          seeStart();
-          document.querySelector(".page-btn4").classList.add("active-btn");
-        } else {
-          console.log("aaa");
-
-          seeThree(pageValue - 1, pageValue, pageValue + 1);
-        }
-      } else if (pageIndex == "5") {
-        if (pageValue > numberOfPages - 4) {
-          document.querySelector(".active-btn").classList.remove("active-btn");
-
-          seeEnd();
-          document.querySelector(".page-btn4").classList.add("active-btn");
-        } else {
-          console.log("a");
-          seeThree(pageValue - 1, pageValue, pageValue + 1);
-        }
-      }
+      pageValue = Number(page.textContent);
+      displayTransactions(pageValue);
     }
   });
 }
 
-//add listener to first page
-eventL(document.querySelector(".page-btn"));
+//Check if button position should be at start, end or middle(three)
+function checkPageBtnPosition(pageIndex, pageValue) {
+  if (pageIndex === "1") {
+    pageBtnPosition = "start";
+  } else if (pageIndex === "7") {
+    pageBtnPosition = "end";
+  } else if (pageBtnPosition == "start" && pageIndex == "5") {
+    pageBtnPosition = "three";
+  } else if (pageBtnPosition == "end" && pageIndex == "3") {
+    pageBtnPosition = "three";
+  } else if (pageBtnPosition == "three" && pageValue < 5) {
+    pageBtnPosition = "start";
+  } else if (pageBtnPosition == "three" && pageValue > numberOfPages - 4) {
+    pageBtnPosition = "end";
+  }
+  return pageBtnPosition;
+}
 
-let addNumBtn = function (index) {
-  pageBtnsContainer.insertAdjacentHTML(
-    //have first page visible
-    "beforeend",
-    ` <button class="page-btn page-btn${index}" index="${index}" value="${index}">${index}</button>`
-  );
-};
+//Update the buttons depending on the button position
+function updateBtn(pageValue) {
+  if (pageBtnPosition == "start") {
+    pageBtns[1].textContent = 2;
+    pageBtns[2].textContent = 3;
+    pageBtns[3].textContent = 4;
+    pageBtns[4].textContent = 5;
+    pageBtns[5].textContent = "...";
+  } else if (pageBtnPosition == "end") {
+    pageBtns[1].textContent = "...";
+    pageBtns[2].textContent = numberOfPages - 4;
+    pageBtns[3].textContent = numberOfPages - 3;
+    pageBtns[4].textContent = numberOfPages - 2;
+    pageBtns[5].textContent = numberOfPages - 1;
+  } else {
+    pageBtns[1].textContent = "...";
+    pageBtns[2].textContent = pageValue - 1;
+    pageBtns[3].textContent = pageValue;
+    pageBtns[4].textContent = pageValue + 1;
+    pageBtns[5].textContent = "...";
+    document.querySelector(".active-btn").classList.remove("active-btn");
+    pageBtns[3].classList.add("active-btn");
+  }
+}
 
-function addPage() {
-  numberOfTransactions = currentTransactions.length;
+//Add event listeners to page buttons once 8th button is created that will handle the button logic from then on
+function clickLogicAt8(page) {
+  //Sets last btn value
+  pageBtns[6].textContent = numberOfPages;
 
+  page.addEventListener("click", function () {
+    pageIndex = page.getAttribute("index"); // current button index
+    pageValue = Number(page.textContent); // current button value
+
+    //Updates currently active btn
+    document.querySelector(".active-btn").classList.remove("active-btn");
+    page.classList.add("active-btn");
+    console.log(`this is index ${pageIndex}`);
+    console.log(`this is index ${pageValue}`);
+
+    checkPageBtnPosition(pageIndex, pageValue);
+    updateBtn(pageValue);
+    displayTransactions(pageValue);
+  });
+}
+
+//Update the buttons when creating the 8th button depending on active button positon
+function updateAt8() {
+  let activeBtn = document.querySelector(".active-btn");
+
+  //Update current pageBtnPosition
+  if (activeBtn.value < 5) {
+    pageBtnPosition = "start";
+  } else if (activeBtn.value > numberOfPages - 5) {
+    pageBtnPosition = "end";
+  } else {
+    pageBtnPosition = "three";
+  }
+
+  updateBtn(pageBtnPosition);
+}
+
+//Check if the page number has increased and if any action is needed to be taken
+function pageIncreaseCheck() {
   if (numberOfPages < Math.ceil(numberOfTransactions / 5)) {
     numberOfPages += 1;
-    if (numberOfPages < 8) {
-      addNumBtn(numberOfPages);
-      eventL(pageBtnsContainer.lastChild);
-    } else {
-      pageBtn2 = document.querySelector(".page-btn2");
-      pageBtn3 = document.querySelector(".page-btn3");
-      pageBtn4 = document.querySelector(".page-btn4");
-      pageBtn5 = document.querySelector(".page-btn5");
-      pageBtn6 = document.querySelector(".page-btn6");
-      pageBtn7 = document.querySelector(".page-btn7");
-
-      pageBtn7.value = numberOfPages;
-      pageBtn7.textContent = numberOfPages;
-      if (document.querySelector(".active-btn").value < 5) {
-        console.log("active < 5");
-        pageBtn6.value = "...";
-        pageBtn6.textContent = "...";
-      } else if (
-        document.querySelector(".active-btn").value >
-        numberOfPages - 5
-      ) {
-        console.log("active > 4");
-        pageBtn2.value = "...";
-        pageBtn2.textContent = "...";
+    if (numberOfPages < 9) {
+      if (numberOfPages < 8) {
+        addPageBtn();
+      } else {
+        updateAt8();
+        pageBtns.forEach((page) => clickLogicAt8(page));
       }
+    } else {
+      pageBtns[pageBtns.length - 1].textContent = `${numberOfPages}`;
     }
   }
 }
 
 /* ///////////////////////// */
-/* Current task - pagination ЕНД*/
+/* PAGINATION END
 /* ///////////////////////// */
 
 /* ///////////////////////// */
@@ -339,8 +345,7 @@ budgetSubmit.addEventListener("click", function () {
 
   if (setBudget(amount)) {
     processTransactionInputs(type, date, nameTrn, amount);
-    displayTransactions();
-    displayBtns();
+    displayTransactions(pageValue);
   }
 });
 
@@ -348,32 +353,31 @@ budgetSubmit.addEventListener("click", function () {
 transactionSubmit.addEventListener("click", function () {
   //Take input values
 
-  //TEST START
-  for (let i = 0; i < 5; i++) {
-    currentTransactions.push({
-      type: "budget",
-      date: new Date(2011, 11, 30),
-      name: "Initial budget.",
-      amount: 123,
-    });
-  }
-
-  addPage();
-  //TEST END
+  currentTransactions.push({
+    type: "budget",
+    date: new Date(2011, 11, 30),
+    name: "Initial budget.",
+    amount: 123,
+  });
 
   let type = transactionType.value;
   let dateInput = transactionDate.value;
   let nameTrn = transactionName.value;
-  nameTrn = nameTrn.charAt(0).toUpperCase() + nameTrn.slice(1);
   let amount = Number(transactionAmount.value);
+  nameTrn = nameTrn.charAt(0).toUpperCase() + nameTrn.slice(1);
+  numberOfTransactions = currentTransactions.length;
 
   //If validation is successful...
   if (validateTransactionInputs(type, dateInput, nameTrn, amount)) {
     processTransactionInputs(type, dateInput, nameTrn, amount); // process transaction
-    displayTransactions(); // display transaction
+    displayTransactions(pageValue);
     transactionTypeSums(); // update incomes and expenses
     resetField(transactionType, transactionName, transactionAmount); // reset input fields
   }
+
+  //If number of pages changes...
+  pageIncreaseCheck();
+  displayTransactions(pageValue);
 });
 
 //Sort buttons
@@ -384,8 +388,7 @@ sortBtns.forEach((btn) => {
     sortColumn = e.target.getAttribute("value"); //gets the name of the column
     e.target.classList.add("sort-focus"); //sets focus on the clicked button
 
-    if (sortColumn == "date") {
-      // sort logic if sorting the dates
+    function sortDate() {
       sortAscending
         ? currentTransactions.sort(
             (a, b) => new Date(a[sortColumn] - b[sortColumn])
@@ -393,8 +396,9 @@ sortBtns.forEach((btn) => {
         : currentTransactions.sort(
             (a, b) => new Date(b[sortColumn] - a[sortColumn])
           );
-    } else {
-      // sort logic if sorting everything else
+    }
+
+    function sortRest() {
       sortAscending
         ? currentTransactions.sort((a, b) =>
             a[sortColumn] < b[sortColumn] ? -1 : 1
@@ -404,8 +408,10 @@ sortBtns.forEach((btn) => {
           );
     }
 
-    sortAscending = !sortAscending; // change ascending to false
+    sortColumn == "date" ? sortDate() : sortRest();
 
-    displayTransactions(); //update transations
+    sortAscending = !sortAscending; // change ascending to false
+    displayTransactions(pageValue);
+    console.log(currentTransactions);
   });
 });

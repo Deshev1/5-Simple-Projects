@@ -41,8 +41,8 @@ transactionDate.max = new Date().toISOString().split("T")[0];
 let currentBalance = 0;
 let currentExpenses = 0;
 let currentIncomes = 0;
-let currentTransactions = [];
-let totalTransactions = currentTransactions.length;
+let trnList = [];
+let totalTransactions = trnList.length;
 
 /* ///////////////////////// */
 /* FUNCTIONS */
@@ -75,7 +75,7 @@ const resetField = function (...fields) {
 const validateTransactionInputs = function (t, d, n, a) {
   //checks if all entries are entered
   if (!t || !d || !n || !a) {
-    // alert("Please fill in all expense details!");
+    alert("Please fill in all expense details!");
     return;
   }
   //checks if budget is entered
@@ -98,12 +98,14 @@ const processTransactionInputs = function (type, dateInput, nameTrn, amount) {
   if (type === "expense") amount = -amount;
 
   //Store transaction details in transactions list
-  currentTransactions.push({
+  trnList.push({
     type: type,
     date: new Date(dateInput),
     name: nameTrn,
     amount: amount,
   });
+
+  numOfTrn = trnList.length;
 
   //Update current budget value
   currentBalance = currentBalance + amount;
@@ -122,7 +124,7 @@ const transactionTypeSums = function () {
   currentBalance = 0;
 
   // go through each transaction and tally up the expenses and incomes
-  currentTransactions.forEach((trn) =>
+  trnList.forEach((trn) =>
     trn.type == "expense"
       ? (currentExpenses += trn.amount)
       : (currentIncomes += trn.amount)
@@ -162,170 +164,236 @@ const styleSortBtn = function (ascending) {
 /* PAGINATION START
 /* ///////////////////////// */
 
+const paginationLbl = document.querySelector(".pagination-lbl");
+let trnPerPageInput = document.querySelector(".number-of-transactions");
+let btnsContainer = document.querySelector(".pagination-btns");
 const pageBtnsContainer = document.querySelector(".number-pages-container");
-let numberOfTransactions = 0;
-let numberOfPages = 1;
-let startTrn = 1;
-let endTrn = 5;
-let pageIndex = 1; // current button index
-let pageValue = 1;
+const previousPage = document.querySelector(".previous-page-btn");
+const nextPage = document.querySelector(".next-page-btn");
 
-//Display transactions
-function displayTransactions(pageNumber) {
-  startTrn = (pageNumber - 1) * 5 + 1;
+let trnPerPage = Number(trnPerPageInput.value);
 
-  endTrn = startTrn + 4;
-  if (endTrn > currentTransactions.length) {
-    endTrn = currentTransactions.length;
+let numOfTrn = trnList.length;
+let numOfPages = 0;
+let pageBtnList = [];
+let pageState;
+
+let activeBtn;
+let activeBtnIndex;
+let activeBtnValue;
+let startTrnIndex;
+let endTrnIndex;
+
+//Adds a page button
+function addPageBtn(index) {
+  //Creates, populates, stores and displays button
+  const pageBtn = document.createElement("button");
+  pageBtn.classList.add("page-btn");
+  pageBtn.setAttribute("index", index);
+  pageBtn.textContent = index;
+  pageBtnsContainer.appendChild(pageBtn);
+  pageBtnList.push(pageBtn);
+
+  //Adds click event listener to make this button active again if clicked
+  pageBtn.addEventListener("click", function () {
+    if (!(pageBtn.textContent == "...")) {
+      makeActiveBtn(pageBtn);
+      displayTransactions();
+    }
+  });
+}
+
+//Makes a passed button active
+function makeActiveBtn(btn) {
+  //Removes active class from all buttons and adds it to this button
+  pageBtnList.forEach((btn) => btn.classList.remove("active-btn"));
+  btn.classList.add("active-btn"); // add active-btn class to current btn
+
+  //Sets this button as active and its variables
+  activeBtn = btn;
+  activeBtnIndex = Number(btn.index);
+  activeBtnValue = Number(btn.textContent);
+}
+
+//Checks if the number of pages has changed and handles it if so
+function pageIncreaseCheck() {
+  let recalcNumPages = Math.ceil(numOfTrn / trnPerPage);
+
+  if (numOfPages != recalcNumPages) {
+    numOfPages = recalcNumPages;
+    pageBtnList = [];
+    pageBtnsContainer.innerHTML = "";
+
+    if (numOfPages < 8) {
+      for (let i = 0; i < numOfPages; i++) {
+        addPageBtn(i + 1);
+      }
+    } else {
+      for (let i = 0; i < 7; i++) {
+        addPageBtn(i + 1);
+      }
+
+      setInitialState();
+
+      pageBtnList.forEach((btn) =>
+        btn.addEventListener("click", function (e) {
+          clickLogic(e.target);
+        })
+      );
+    }
+    makeActiveBtn(pageBtnList[pageBtnList.length - 1]);
   }
+}
 
+//Displays transactions in the table
+function displayTransactions() {
   transactionTable.innerHTML = "";
 
-  for (let i = startTrn - 1; i < endTrn; i++) {
-    console.log(`i ${i}`);
-    trn = currentTransactions[i];
-    let html = `<tr class="${trn.type}-row">
-        <td class="t-type">${trn.type}</td>
-        <td class="t-date">${trn.date.toISOString().split("T")[0]}</td>
-        <td class="t-name">${trn.name}</td>
-        <td class="t-number">${trn.amount}lv.</td>
+  startTrnIndex = (activeBtnValue - 1) * trnPerPage;
+  endTrnIndex = startTrnIndex + trnPerPage;
+  if (endTrnIndex > numOfTrn) {
+    endTrnIndex = numOfTrn;
+  } else {
+    endTrnIndex = startTrnIndex + trnPerPage;
+  }
+
+  for (let i = startTrnIndex; i < endTrnIndex; i++) {
+    let currTrn = trnList[i];
+    let html = `<tr class="${currTrn.type}-row">
+        <td class="t-type">${currTrn.type}</td>
+        <td class="t-date">${currTrn.date.toISOString().split("T")[0]}</td>
+        <td class="t-name">${currTrn.name}</td>
+        <td class="t-number">${currTrn.amount}lv.</td>
       </tr>`;
 
     transactionTable.insertAdjacentHTML("beforeend", html);
   }
 
-  document.querySelector(
-    ".pagination-lbl"
-  ).textContent = `Currently  ${startTrn} to ${endTrn} of ${currentTransactions.length} `;
+  paginationLbl.textContent = `Currently showing ${
+    startTrnIndex + 1
+  } to ${endTrnIndex} out of ${numOfTrn} `;
 }
 
-//Keeps track how the buttons should be displayed
-let pageBtnPosition = "start";
-
-// Array that will store newly created page buttons for easier accessability
-let pageBtns = [];
-
-//Adds the first page and makes it active.
-addPageBtn();
-pageBtns[0].classList.add("active-btn");
-
-// Add page button on page increase till 8 buttons
-function addPageBtn() {
-  //Create page button along with its info, make it visible on the page and store the element in pages array
-  const page = document.createElement("button");
-  page.classList.add("page-btn", `page-btn${numberOfPages}`);
-  page.setAttribute("index", numberOfPages);
-  page.setAttribute("value", numberOfPages);
-  page.textContent = `${numberOfPages}`;
-  pageBtnsContainer.appendChild(page);
-  pageBtns.push(page);
-
-  //Event listener to make the button active on click and remove active label from other button
-  page.addEventListener("click", function () {
-    if (!page.classList.contains("active-btn")) {
-      document.querySelector(".active-btn").classList.remove("active-btn"); // remove active-btn class from previous button
-      page.classList.add("active-btn"); // add active-btn class to current btn
-      pageValue = Number(page.textContent);
-      displayTransactions(pageValue);
-    }
-  });
-}
-
-//Check if button position should be at start, end or middle(three)
-function checkPageBtnPosition(pageIndex, pageValue) {
-  if (pageIndex === "1") {
-    pageBtnPosition = "start";
-  } else if (pageIndex === "7") {
-    pageBtnPosition = "end";
-  } else if (pageBtnPosition == "start" && pageIndex == "5") {
-    pageBtnPosition = "three";
-  } else if (pageBtnPosition == "end" && pageIndex == "3") {
-    pageBtnPosition = "three";
-  } else if (pageBtnPosition == "three" && pageValue < 5) {
-    pageBtnPosition = "start";
-  } else if (pageBtnPosition == "three" && pageValue > numberOfPages - 4) {
-    pageBtnPosition = "end";
-  }
-  return pageBtnPosition;
-}
-
-//Update the buttons depending on the button position
-function updateBtn(pageValue) {
-  if (pageBtnPosition == "start") {
-    pageBtns[1].textContent = 2;
-    pageBtns[2].textContent = 3;
-    pageBtns[3].textContent = 4;
-    pageBtns[4].textContent = 5;
-    pageBtns[5].textContent = "...";
-  } else if (pageBtnPosition == "end") {
-    pageBtns[1].textContent = "...";
-    pageBtns[2].textContent = numberOfPages - 4;
-    pageBtns[3].textContent = numberOfPages - 3;
-    pageBtns[4].textContent = numberOfPages - 2;
-    pageBtns[5].textContent = numberOfPages - 1;
-  } else {
-    pageBtns[1].textContent = "...";
-    pageBtns[2].textContent = pageValue - 1;
-    pageBtns[3].textContent = pageValue;
-    pageBtns[4].textContent = pageValue + 1;
-    pageBtns[5].textContent = "...";
-    document.querySelector(".active-btn").classList.remove("active-btn");
-    pageBtns[3].classList.add("active-btn");
-  }
-}
-
-//Add event listeners to page buttons once 8th button is created that will handle the button logic from then on
-function clickLogicAt8(page) {
-  //Sets last btn value
-  pageBtns[6].textContent = numberOfPages;
-
-  page.addEventListener("click", function () {
-    pageIndex = page.getAttribute("index"); // current button index
-    pageValue = Number(page.textContent); // current button value
-
-    //Updates currently active btn
-    document.querySelector(".active-btn").classList.remove("active-btn");
-    page.classList.add("active-btn");
-    console.log(`this is index ${pageIndex}`);
-    console.log(`this is index ${pageValue}`);
-
-    checkPageBtnPosition(pageIndex, pageValue);
-    updateBtn(pageValue);
-    displayTransactions(pageValue);
-  });
-}
-
-//Update the buttons when creating the 8th button depending on active button positon
-function updateAt8() {
-  let activeBtn = document.querySelector(".active-btn");
-
+//Sets the view state of the page buttons (start, mid, end)
+function setInitialState() {
   //Update current pageBtnPosition
-  if (activeBtn.value < 5) {
-    pageBtnPosition = "start";
-  } else if (activeBtn.value > numberOfPages - 5) {
-    pageBtnPosition = "end";
+  if (activeBtnValue < 5) {
+    pageState = "start";
+  } else if (activeBtnValue > numOfPages - 5) {
+    pageState = "end";
   } else {
-    pageBtnPosition = "three";
+    pageState = "three";
   }
 
-  updateBtn(pageBtnPosition);
+  updateBtns();
+  pageBtnList[6].textContent = numOfPages;
 }
 
-//Check if the page number has increased and if any action is needed to be taken
-function pageIncreaseCheck() {
-  if (numberOfPages < Math.ceil(numberOfTransactions / 5)) {
-    numberOfPages += 1;
-    if (numberOfPages < 9) {
-      if (numberOfPages < 8) {
-        addPageBtn();
-      } else {
-        updateAt8();
-        pageBtns.forEach((page) => clickLogicAt8(page));
-      }
-    } else {
-      pageBtns[pageBtns.length - 1].textContent = `${numberOfPages}`;
+//Updates buttons depending on state
+function updateBtns() {
+  //Button update template
+  function btnUpdateTemplate(c1, c2, c3, c4, c5) {
+    pageBtnList[1].textContent = c1;
+    pageBtnList[2].textContent = c2;
+    pageBtnList[3].textContent = c3;
+    pageBtnList[4].textContent = c4;
+    pageBtnList[5].textContent = c5;
+  }
+
+  if (pageState == "start") {
+    btnUpdateTemplate(2, 3, 4, 5, "...");
+  } else if (pageState == "end") {
+    btnUpdateTemplate(
+      "...",
+      numOfPages - 4,
+      numOfPages - 3,
+      numOfPages - 2,
+      numOfPages - 1
+    );
+  } else {
+    btnUpdateTemplate(
+      "...",
+      activeBtnValue - 1,
+      activeBtnValue,
+      activeBtnValue + 1,
+      "..."
+    );
+    makeActiveBtn(pageBtnList[3]);
+  }
+}
+
+//On-click logic for page btns (7+ buttons)
+function clickLogic(btn) {
+  let clickedBtn = btn;
+  let clickedBtnIndex = Number(btn.getAttribute("index"));
+  let clickedBtnValue = btn.textContent;
+
+  if (!(clickedBtnValue == "...")) {
+    makeActiveBtn(clickedBtn);
+    if (clickedBtnIndex === 1) {
+      pageState = "start";
+    } else if (clickedBtnIndex === 7) {
+      pageState = "end";
+    } else if (pageState == "start" && clickedBtnIndex == 5) {
+      pageState = "three";
+    } else if (pageState == "end" && clickedBtnIndex == 3) {
+      pageState = "three";
+    } else if (pageState == "three" && Number(clickedBtnValue) < 5) {
+      pageState = "start";
+      makeActiveBtn(pageBtnList[3]);
+    } else if (
+      pageState == "three" &&
+      Number(clickedBtnValue) > numOfPages - 4
+    ) {
+      pageState = "end";
+      makeActiveBtn(pageBtnList[3]);
     }
   }
+
+  updateBtns();
+  displayTransactions();
+}
+
+//Creates direction buttons and their handlers
+function createDirectionBtns() {
+  //Creates next button
+  const nextPageBtn = document.createElement("button");
+  nextPageBtn.classList.add("next-page-btn", "change-page-btn");
+  nextPageBtn.textContent = "Next";
+  btnsContainer.insertAdjacentElement("beforeend", nextPageBtn);
+
+  //Handles next button's click
+  nextPageBtn.addEventListener("click", function () {
+    let nextBtn = pageBtnList[Number(activeBtn.getAttribute("index"))];
+    if (nextBtn) {
+      if (pageBtnList.length < 7) {
+        makeActiveBtn(nextBtn);
+        displayTransactions();
+      } else {
+        clickLogic(nextBtn);
+      }
+    }
+  });
+
+  //Creates previous button
+  const prevPageBtn = document.createElement("button");
+  prevPageBtn.classList.add("prev-page-btn", "change-page-btn");
+  prevPageBtn.textContent = "Previous";
+  btnsContainer.insertAdjacentElement("afterbegin", prevPageBtn);
+
+  //Handles previous button's click
+  prevPageBtn.addEventListener("click", function () {
+    console.log(prevPageBtn);
+    let prevBtn = pageBtnList[Number(activeBtn.getAttribute("index")) - 2];
+    if (prevBtn) {
+      if (pageBtnList.length < 7) {
+        makeActiveBtn(prevBtn);
+        displayTransactions();
+      } else {
+        clickLogic(prevBtn);
+      }
+    }
+  });
 }
 
 /* ///////////////////////// */
@@ -345,39 +413,30 @@ budgetSubmit.addEventListener("click", function () {
 
   if (setBudget(amount)) {
     processTransactionInputs(type, date, nameTrn, amount);
-    displayTransactions(pageValue);
+    pageIncreaseCheck();
+    displayTransactions();
+    createDirectionBtns();
   }
 });
 
 //Add transaction¸
 transactionSubmit.addEventListener("click", function () {
   //Take input values
-
-  currentTransactions.push({
-    type: "budget",
-    date: new Date(2011, 11, 30),
-    name: "Initial budget.",
-    amount: 123,
-  });
-
   let type = transactionType.value;
   let dateInput = transactionDate.value;
   let nameTrn = transactionName.value;
   let amount = Number(transactionAmount.value);
   nameTrn = nameTrn.charAt(0).toUpperCase() + nameTrn.slice(1);
-  numberOfTransactions = currentTransactions.length;
+  numberOfTransactions = trnList.length;
 
   //If validation is successful...
   if (validateTransactionInputs(type, dateInput, nameTrn, amount)) {
     processTransactionInputs(type, dateInput, nameTrn, amount); // process transaction
-    displayTransactions(pageValue);
     transactionTypeSums(); // update incomes and expenses
     resetField(transactionType, transactionName, transactionAmount); // reset input fields
+    pageIncreaseCheck();
+    displayTransactions();
   }
-
-  //If number of pages changes...
-  pageIncreaseCheck();
-  displayTransactions(pageValue);
 });
 
 //Sort buttons
@@ -390,28 +449,46 @@ sortBtns.forEach((btn) => {
 
     function sortDate() {
       sortAscending
-        ? currentTransactions.sort(
-            (a, b) => new Date(a[sortColumn] - b[sortColumn])
-          )
-        : currentTransactions.sort(
-            (a, b) => new Date(b[sortColumn] - a[sortColumn])
-          );
+        ? trnList.sort((a, b) => new Date(a[sortColumn] - b[sortColumn]))
+        : trnList.sort((a, b) => new Date(b[sortColumn] - a[sortColumn]));
     }
 
     function sortRest() {
       sortAscending
-        ? currentTransactions.sort((a, b) =>
-            a[sortColumn] < b[sortColumn] ? -1 : 1
-          )
-        : currentTransactions.sort((a, b) =>
-            a[sortColumn] > b[sortColumn] ? -1 : 1
-          );
+        ? trnList.sort((a, b) => (a[sortColumn] < b[sortColumn] ? -1 : 1))
+        : trnList.sort((a, b) => (a[sortColumn] > b[sortColumn] ? -1 : 1));
     }
 
     sortColumn == "date" ? sortDate() : sortRest();
 
     sortAscending = !sortAscending; // change ascending to false
-    displayTransactions(pageValue);
-    console.log(currentTransactions);
+    displayTransactions();
   });
 });
+
+trnPerPageInput.onchange = (e) => {
+  trnPerPage = Number(e.target.value);
+  pageIncreaseCheck();
+  displayTransactions();
+};
+
+//TEST BTN - ADD 5 TRN
+
+//Add: random rate, random amount, random type
+
+// testBtn.addEventListener("click", function () {
+//   for (let i = 0; i < 5; i++) {
+//     trnList.push({
+//       type: "income",
+//       date: new Date(2011, 11, 30),
+//       name: "Big biznis.",
+//       amount: 123,
+//     });
+//     processTransactionInputs(type, dateInput, nameTrn, amount); // process transaction
+//   }
+
+//   transactionTypeSums(); // update incomes and expenses
+//   pageIncreaseCheck();
+//   displayTransactions();
+// });
+//TEST BTN END

@@ -119,14 +119,21 @@
 
       <div class="card flex-column">
 
-        <div class="pagination-container">
-          <label class="pagination-lbl">No entries available</label>
-          <div class="pagination-btns">
-            <button class="change-page-btn  previous-page-btn">Previous</button>
-            <div class="number-pages-container">
-            </div>
-            <button class="change-page-btn next-page-btn">Next</button>
+        <div class="filters-container">
 
+          <div class="number-of-transactions-container">
+            <label>Show:</label>
+            <select class="number-of-transactions">
+              <option value='2'>2</option>
+              <option value='5'>5</option>
+              <option value='10'>10</option>
+              <option value='20'>20</option>
+            </select>
+          </div>
+
+          <div class="search-container">
+            <input class="search-field" type="text">
+            <button class="search-field-btn"></button>
           </div>
 
         </div>
@@ -134,10 +141,10 @@
         <table class="transaction-table">
           <thead class="table-headings">
             <tr class="table-headings">
-              <th class="sort-btn" value='type'>Type</th>
-              <th class="sort-btn" value='date'>Date</th>
-              <th class="sort-btn" value='name'>Name</th>
-              <th class="sort-btn" value='amount'>Amount</th>
+              <th class="sort-btn sort-btn-type" value='type'>Type</th>
+              <th class="sort-btn sort-btn-date" value='date'>Date</th>
+              <th class="sort-btn sort-btn-name" value='name'>Name</th>
+              <th class="sort-btn sort-btn-amount" value='amount'>Amount</th>
             </tr>
           </thead>
           <tbody class=table-body>
@@ -146,6 +153,15 @@
             </tr>
           </tbody>
         </table>
+
+        <div class="pagination-container">
+          <label class="pagination-lbl">No entries available</label>
+          <div class="pagination-btns">
+            <div class="number-pages-container">
+            </div>
+          </div>
+
+        </div>
 
 
 

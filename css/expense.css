@@ -91,7 +91,7 @@ th {
 }
 
 tbody tr:hover {
-  border: 2px solid black;
+  background-color: white;
 }
 
 .pagination-container {
@@ -123,8 +123,7 @@ tbody tr:hover {
   width: 2.3rem;
 }
 
-.next-page-btn,
-.previous-page-btn {
+.change-page-btn {
   height: 2.3rem;
   width: 7.3rem;
 }
@@ -138,4 +137,10 @@ tbody tr:hover {
 .active-btn {
   background-color: #ffffffd6;
   border: 2px solid rgba(0, 0, 0, 0.501);
+}
+
+.sort-btn-type,
+.sort-btn-date,
+.sort-btn-amount {
+  width: 15rem;
 }

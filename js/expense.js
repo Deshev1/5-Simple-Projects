@@ -198,7 +198,7 @@ function addPageBtn(index) {
   pageBtn.addEventListener("click", function () {
     if (!(pageBtn.textContent == "...")) {
       makeActiveBtn(pageBtn);
-      displayTransactions();
+      displayTransactions(trnList);
     }
   });
 }
@@ -216,7 +216,7 @@ function makeActiveBtn(btn) {
 }
 
 //Checks if the number of pages has changed and handles it if so
-function pageIncreaseCheck() {
+function pageIncreaseCheck(numOfTrn) {
   let recalcNumPages = Math.ceil(numOfTrn / trnPerPage);
 
   if (numOfPages != recalcNumPages) {
@@ -246,19 +246,20 @@ function pageIncreaseCheck() {
 }
 
 //Displays transactions in the table
-function displayTransactions() {
+function displayTransactions(arr) {
   transactionTable.innerHTML = "";
+  let arrLength = arr.length;
 
   startTrnIndex = (activeBtnValue - 1) * trnPerPage;
   endTrnIndex = startTrnIndex + trnPerPage;
-  if (endTrnIndex > numOfTrn) {
-    endTrnIndex = numOfTrn;
+  if (endTrnIndex > arrLength) {
+    endTrnIndex = arrLength;
   } else {
     endTrnIndex = startTrnIndex + trnPerPage;
   }
 
   for (let i = startTrnIndex; i < endTrnIndex; i++) {
-    let currTrn = trnList[i];
+    let currTrn = arr[i];
     let html = `<tr class="${currTrn.type}-row">
         <td class="t-type">${currTrn.type}</td>
         <td class="t-date">${currTrn.date.toISOString().split("T")[0]}</td>
@@ -271,7 +272,7 @@ function displayTransactions() {
 
   paginationLbl.textContent = `Currently showing ${
     startTrnIndex + 1
-  } to ${endTrnIndex} out of ${numOfTrn} `;
+  } to ${endTrnIndex} out of ${arrLength} `;
 }
 
 //Sets the view state of the page buttons (start, mid, end)
@@ -351,7 +352,7 @@ function clickLogic(btn) {
   }
 
   updateBtns();
-  displayTransactions();
+  displayTransactions(trnList);
 }
 
 //Creates direction buttons and their handlers
@@ -368,7 +369,7 @@ function createDirectionBtns() {
     if (nextBtn) {
       if (pageBtnList.length < 7) {
         makeActiveBtn(nextBtn);
-        displayTransactions();
+        displayTransactions(trnList);
       } else {
         clickLogic(nextBtn);
       }
@@ -388,7 +389,7 @@ function createDirectionBtns() {
     if (prevBtn) {
       if (pageBtnList.length < 7) {
         makeActiveBtn(prevBtn);
-        displayTransactions();
+        displayTransactions(trnList);
       } else {
         clickLogic(prevBtn);
       }
@@ -398,6 +399,49 @@ function createDirectionBtns() {
 
 /* ///////////////////////// */
 /* PAGINATION END
+/* ///////////////////////// */
+
+/* ///////////////////////// */
+/* SEARCH BAR START
+/* ///////////////////////// */
+const searchField = document.querySelector(".search-field");
+const searchFieldBtn = document.querySelector(".search-field-btn");
+
+let searchCriteria;
+let filteredTrns = [];
+
+function searchBarLogic() {
+  searchCriteria = searchField.value;
+  console.log(searchCriteria);
+  if (trnList.length != 0) {
+    if (searchCriteria != "") {
+      filteredTrns = trnList.filter(
+        (el) =>
+          el.name.includes(searchCriteria) ||
+          el.amount.toString().includes(searchCriteria)
+      );
+      console.log(filteredTrns);
+      console.log(trnList);
+
+      pageIncreaseCheck(filteredTrns.length);
+      displayTransactions(filteredTrns);
+    }
+  } else {
+    console.log(`filtered ${filteredTrns}`);
+    console.log(`normal ${trnList}`);
+
+    pageIncreaseCheck(trnList.length);
+    displayTransactions(trnList);
+  }
+}
+
+searchFieldBtn.addEventListener("click", function () {
+  searchBarLogic();
+  searchCriteria = "";
+});
+
+/* ///////////////////////// */
+/* SEARCH BAR END
 /* ///////////////////////// */
 
 /* ///////////////////////// */
@@ -413,8 +457,8 @@ budgetSubmit.addEventListener("click", function () {
 
   if (setBudget(amount)) {
     processTransactionInputs(type, date, nameTrn, amount);
-    pageIncreaseCheck();
-    displayTransactions();
+    pageIncreaseCheck(numOfTrn);
+    displayTransactions(trnList);
     createDirectionBtns();
   }
 });
@@ -434,8 +478,8 @@ transactionSubmit.addEventListener("click", function () {
     processTransactionInputs(type, dateInput, nameTrn, amount); // process transaction
     transactionTypeSums(); // update incomes and expenses
     resetField(transactionType, transactionName, transactionAmount); // reset input fields
-    pageIncreaseCheck();
-    displayTransactions();
+    pageIncreaseCheck(numOfTrn);
+    displayTransactions(trnList);
   }
 });
 
@@ -462,33 +506,44 @@ sortBtns.forEach((btn) => {
     sortColumn == "date" ? sortDate() : sortRest();
 
     sortAscending = !sortAscending; // change ascending to false
-    displayTransactions();
+    displayTransactions(trnList);
   });
 });
 
 trnPerPageInput.onchange = (e) => {
   trnPerPage = Number(e.target.value);
-  pageIncreaseCheck();
-  displayTransactions();
+  pageIncreaseCheck(numOfTrn);
+  displayTransactions(trnList);
 };
 
 //TEST BTN - ADD 5 TRN
 
 //Add: random rate, random amount, random type
+let testBtn = document.querySelector(".test-btn");
 
-// testBtn.addEventListener("click", function () {
-//   for (let i = 0; i < 5; i++) {
-//     trnList.push({
-//       type: "income",
-//       date: new Date(2011, 11, 30),
-//       name: "Big biznis.",
-//       amount: 123,
-//     });
-//     processTransactionInputs(type, dateInput, nameTrn, amount); // process transaction
-//   }
+testBtn.addEventListener("click", function () {
+  function randomDateFunc(start, end) {
+    return new Date(
+      start.getTime() + Math.random() * (end.getTime() - start.getTime())
+    );
+  }
 
-//   transactionTypeSums(); // update incomes and expenses
-//   pageIncreaseCheck();
-//   displayTransactions();
-// });
+  let typeData;
+  let dateData;
+  let nameData;
+  let amountData;
+
+  for (let i = 0; i < 5; i++) {
+    typeData = "income";
+    dateData = randomDateFunc(new Date(2012, 0, 1), new Date());
+    nameData = "Big biznis.";
+    amountData = Math.floor(Math.random() * 1000);
+
+    processTransactionInputs(typeData, dateData, nameData, amountData);
+  }
+
+  transactionTypeSums(); // update incomes and expenses
+  pageIncreaseCheck(trnList.length);
+  displayTransactions(trnList);
+});
 //TEST BTN END

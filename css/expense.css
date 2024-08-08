@@ -144,3 +144,9 @@ tbody tr:hover {
 .sort-btn-amount {
   width: 15rem;
 }
+
+.search-field-btn {
+  width: 10rem;
+  height: 10rem;
+  background-color: red;
+}

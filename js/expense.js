@@ -409,10 +409,11 @@ const searchFieldBtn = document.querySelector(".search-field-btn");
 
 let searchCriteria;
 let filteredTrns = [];
+let currentlyDisplaying;
 
 function searchBarLogic() {
   searchCriteria = searchField.value;
-  console.log(searchCriteria);
+
   if (trnList.length != 0) {
     if (searchCriteria != "") {
       filteredTrns = trnList.filter(
@@ -420,24 +421,22 @@ function searchBarLogic() {
           el.name.includes(searchCriteria) ||
           el.amount.toString().includes(searchCriteria)
       );
-      console.log(filteredTrns);
-      console.log(trnList);
-
-      pageIncreaseCheck(filteredTrns.length);
-      displayTransactions(filteredTrns);
+      if (filteredTrns.length > 0) {
+        currentlyDisplaying = "filtered";
+        searchField.value = "";
+        pageIncreaseCheck(filteredTrns.length);
+        displayTransactions(filteredTrns);
+      }
+    } else if (currentlyDisplaying == "filtered") {
+      currentlyDisplaying = "all";
+      pageIncreaseCheck(trnList.length);
+      displayTransactions(trnList);
     }
-  } else {
-    console.log(`filtered ${filteredTrns}`);
-    console.log(`normal ${trnList}`);
-
-    pageIncreaseCheck(trnList.length);
-    displayTransactions(trnList);
   }
 }
 
 searchFieldBtn.addEventListener("click", function () {
   searchBarLogic();
-  searchCriteria = "";
 });
 
 /* ///////////////////////// */
@@ -534,10 +533,17 @@ testBtn.addEventListener("click", function () {
   let amountData;
 
   for (let i = 0; i < 5; i++) {
-    typeData = "income";
     dateData = randomDateFunc(new Date(2012, 0, 1), new Date());
     nameData = "Big biznis.";
     amountData = Math.floor(Math.random() * 1000);
+    typeData = "income";
+
+    if (Math.floor(Math.random() * 2) == 1) {
+      typeData = "income";
+    } else {
+      typeData = "expense";
+      amountData = Math.floor(Math.random() * currentBalance);
+    }
 
     processTransactionInputs(typeData, dateData, nameData, amountData);
   }

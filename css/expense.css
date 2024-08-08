@@ -71,7 +71,7 @@ th {
   font-size: 1rem;
   color: var(--up-arrow-color);
   text-shadow: var(--up-arrow-shadow);
-  right: 5rem;
+  right: 2rem;
 }
 
 .sort-focus::before {
@@ -81,7 +81,7 @@ th {
   cursor: pointer;
   color: var(--down-arrow-color);
   text-shadow: var(--down-arrow-shadow);
-  right: 5rem;
+  right: 2rem;
   margin-top: 1rem;
 }
 
